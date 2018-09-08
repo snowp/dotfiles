@@ -48,3 +48,10 @@ if [ $? -eq 1 ]; then
     ln -sf "$DOTFILES_DIR/.tmux.conf.local" .
   popd
 fi
+
+# Install wd
+which wd
+if [ $? -eq 1 ]; then
+  curl -L https://github.com/mfaerevaag/wd/raw/master/install.sh | sh
+fi
+
