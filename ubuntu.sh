@@ -3,7 +3,7 @@
 REPOS_DIR=$HOME/Development
 DOTFILES_DIR=$(pwd)
 
-if [ "$(dirname "$(reapath "$0")")" != "$DOTFILES_DIR" ]; then
+if [ "$(dirname "$(realpath "$0")")" != "$DOTFILES_DIR" ]; then
   echo 'run this script from the dotfiles repo!'
   exit 1
 fi
