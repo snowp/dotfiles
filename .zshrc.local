@@ -43,6 +43,7 @@ alias gic='git commit -m'
 alias zshrc='nvim ~/.zshrc; source ~/.zshrc'
 alias tmuxrc='nvim ~/.tmux.conf'
 alias v=nvim
+alias vim=nvim # get that muscle memory right for remote usage
 alias sus='sort|uniq -c|sort'
 alias j='cd $JH'
 alias beep='be rubocop'
