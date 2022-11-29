@@ -1,0 +1,12 @@
+[user]
+	email = snowp@lyft.com
+	name = Snow Pettersen
+[pull]
+	rebase = false
+[color]
+	ui = auto
+  editor = nvim -u ~/.config/nvim/init-git.vim
+[init]
+	defaultBranch = main
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
