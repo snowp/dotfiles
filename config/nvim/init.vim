@@ -171,7 +171,8 @@ nnoremap Q :quit<CR>
 " Easier save mapping
 nnoremap W :write<CR>
 
-nnoremap <Leader>f :Telescope find_files<cr>
+nnoremap <Leader>f :Telescope git_files<cr>
+nnoremap <Leader>F :Telescope find_files<cr>
 nnoremap <Leader>r :Telescope live_grep<CR>
 nnoremap <Leader>b :Telescope buffers<CR>
 nnoremap <leader>l :FormatCode<cr>
