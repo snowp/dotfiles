@@ -105,7 +105,7 @@ require'lspconfig'.gopls.setup{
   capabilities = capabilities,
 }
 
-require'lspconfig'.terraform.setup{
+require'lspconfig'.terraformls.setup{
   on_attach = on_attach,
   capabilities = capabilities,
 }
