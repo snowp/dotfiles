@@ -1,9 +1,9 @@
 -- Configure LSP
-local opts = { noremap=true, silent=true }
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
+local remap_opts = { noremap=true, silent=true }
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, remap_opts)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, remap_opts)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, remap_opts)
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, remap_opts)
 
 local lsp_spinner = require "lsp_spinner"
 
@@ -35,8 +35,6 @@ lsp_spinner.init_capabilities(capabilities)
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-  require("lsp_spinner").on_attach(client, bufnr)
-
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -58,6 +56,8 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<leader>k', vim.lsp.buf.formatting, bufopts)
+
+  require("lsp_spinner").on_attach(client, bufnr)
 end
 
 local lsp_flags = {
@@ -66,7 +66,6 @@ local lsp_flags = {
 }
 
 require "lsp_signature".setup(cfg)
-
 
 local lsp_status = require('lsp-status')
 lsp_status.register_progress()
@@ -100,7 +99,7 @@ table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
 require'lspconfig'.sumneko_lua.setup({
-on_attach = custom_attach,
+on_attach = on_attach,
 settings = {
     Lua = {
     runtime = {
@@ -191,7 +190,7 @@ local opts = {
                 -- rust-analyzer.diagnostics.experimental.enable
                 diagnostics = {
                   experimental = {
-                    enable = true 
+                    enable = true
                   }
                 },
                 procMacro = {

@@ -173,7 +173,7 @@ nnoremap W :write<CR>
 
 nnoremap <Leader>f :Telescope git_files<cr>
 nnoremap <Leader>F :Telescope find_files<cr>
-nnoremap <Leader>r :Telescope live_grep<CR>
+nnoremap <Leader>g :Telescope live_grep<CR>
 nnoremap <Leader>b :Telescope buffers<CR>
 nnoremap <leader>l :FormatCode<cr>
 
@@ -284,7 +284,7 @@ endfunction
 " Status line setup (without plugins)
 set laststatus=2 " Always show the statusline
 " Left Side
-set statusline=
+set statusline=%{LspStatus()}
 set statusline+=%#IncSearch#%{&paste?'\ \ PASTE\ ':''}%*
 set statusline+=\ %.50f
 set statusline+=\ %m
