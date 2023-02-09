@@ -60,12 +60,7 @@ local on_attach = function(client, bufnr)
   require("lsp_spinner").on_attach(client, bufnr)
 end
 
-local lsp_flags = {
-  -- This is the default in Nvim 0.7+
-  debounce_text_changes = 150,
-}
-
-require "lsp_signature".setup(cfg)
+require "lsp_signature".setup()
 
 local lsp_status = require('lsp-status')
 lsp_status.register_progress()
@@ -149,7 +144,7 @@ local on_rust_attach = function(client, bufnr)
   on_attach(client, bufnr)
 
   local bufopts = { noremap=true, silent=true, buffer=bufnr }
-  vim.keymap.set('n', '<leader>g', require'rust-tools.hover_actions'.hover_actions, bufopts)
+  vim.keymap.set('n', '<leader>g', ':RustHoverActions<CR>', bufopts)
   vim.keymap.set('n', '<leader>a', require('rust-tools/code_action_group').code_action_group, bufopts)
 end
 
@@ -160,7 +155,6 @@ local liblldb_path = extension_path .. 'lldb/lib/liblldb.dylib'
 local opts = {
     tools = { -- rust-tools options
         autoSetHints = true,
-        hover_with_actions = true,
         inlay_hints = {
             show_parameter_hints = false,
             parameter_hints_prefix = "",
@@ -188,11 +182,6 @@ local opts = {
             ["rust-analyzer"] = {
                 -- enable clippy on save
                 -- rust-analyzer.diagnostics.experimental.enable
-                diagnostics = {
-                  experimental = {
-                    enable = true
-                  }
-                },
                 procMacro = {
                   enable = true,
                 },
@@ -217,6 +206,38 @@ local opts = {
 }
 require('rust-tools').setup(opts)
 
+local sign = function(sign_opts)
+  vim.fn.sign_define(sign_opts.name, {
+    texthl = sign_opts.name,
+    text = sign_opts.text,
+    numhl = ''
+  })
+end
+
+sign({name = 'DiagnosticSignError', text = ''})
+sign({name = 'DiagnosticSignWarn', text = ''})
+sign({name = 'DiagnosticSignHint', text = ''})
+sign({name = 'DiagnosticSignInfo', text = ''})
+
+vim.diagnostic.config({
+    virtual_text = false,
+    signs = true,
+    update_in_insert = true,
+    underline = true,
+    severity_sort = false,
+    float = {
+        border = 'rounded',
+        source = 'always',
+        header = '',
+        prefix = '',
+    },
+})
+
+vim.cmd([[
+set signcolumn=yes
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+]])
+
 local cmp = require'cmp'
 cmp.setup({
   -- Enable LSP snippets
@@ -240,12 +261,59 @@ cmp.setup({
       select = true,
     })
   },
+  window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+  },
+  formatting = {
+      fields = {'menu', 'abbr', 'kind'},
+      format = function(entry, item)
+          local menu_icon ={
+              nvim_lsp = 'λ',
+              vsnip = '⋗',
+              buffer = 'Ω',
+              path = '🖫',
+          }
+          item.menu = menu_icon[entry.source.name]
+          return item
+      end,
+  },
 
   -- Installed sources
   sources = {
     { name = 'nvim_lsp' },
+    { name = 'nvim_lsp_signature_help' },
+    { name = 'nvim_lua' },
     { name = 'vsnip' },
     { name = 'path' },
     { name = 'buffer' },
+    { name = 'calc' },
   },
 })
+
+vim.opt.completeopt = {'menuone', 'noselect', 'noinsert'}
+vim.opt.shortmess = vim.opt.shortmess + { c = true}
+vim.api.nvim_set_option('updatetime', 300)
+
+vim.cmd([[
+set signcolumn=yes
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+]])
+
+require('nvim-treesitter.configs').setup {
+  ensure_installed = { "lua", "rust", "toml" },
+  auto_install = true,
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting=false,
+  },
+  ident = { enable = true }, 
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    max_file_lines = nil,
+  }
+}
+
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'

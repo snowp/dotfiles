@@ -31,6 +31,8 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-nvim-lua'
+Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
@@ -179,7 +181,6 @@ nnoremap <leader>l :FormatCode<cr>
 
 " Completion options
 set complete=.,w,b,u,t,kspell
-set completeopt=menuone,noinsert,noselect
 set wildmenu                                           " Better completion in the CLI
 set wildmode=longest:full,full                         " Completion settings
 
