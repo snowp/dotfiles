@@ -175,8 +175,10 @@ nnoremap W :write<CR>
 
 nnoremap <Leader>f :Telescope git_files<cr>
 nnoremap <Leader>F :Telescope find_files<cr>
-nnoremap <Leader>g :Telescope live_grep<CR>
+nnoremap <Leader>r :Telescope live_grep<CR>
 nnoremap <Leader>b :Telescope buffers<CR>
+nnoremap <Leader>c :Telescope current_buffer_fuzzy_find<CR>
+nnoremap <Leader>h :Telescope command_history<CR>
 nnoremap <leader>l :FormatCode<cr>
 
 " Completion options

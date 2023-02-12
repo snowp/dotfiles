@@ -57,7 +57,7 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<leader>k', vim.lsp.buf.formatting, bufopts)
 
-  require("lsp_spinner").on_attach(client, bufnr)
+  -- require("lsp_spinner").on_attach(client, bufnr)
 end
 
 require "lsp_signature".setup()
@@ -233,11 +233,6 @@ vim.diagnostic.config({
     },
 })
 
-vim.cmd([[
-set signcolumn=yes
-autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
-]])
-
 local cmp = require'cmp'
 cmp.setup({
   -- Enable LSP snippets
@@ -295,19 +290,16 @@ vim.opt.completeopt = {'menuone', 'noselect', 'noinsert'}
 vim.opt.shortmess = vim.opt.shortmess + { c = true}
 vim.api.nvim_set_option('updatetime', 300)
 
-vim.cmd([[
-set signcolumn=yes
-autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
-]])
+-- vim.cmd([[
+-- set signcolumn=yes
+-- autocmd CursorHold rust lua vim.diagnostic.open_float(nil, { focusable = false })
+-- ]])
 
 require('nvim-treesitter.configs').setup {
-  ensure_installed = { "lua", "rust", "toml" },
+  ensure_installed = { "lua", "rust", "toml", "swift", "terraform", "yaml", "cpp", "json", "python" },
   auto_install = true,
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting=false,
-  },
-  ident = { enable = true }, 
+  ident = { enable = true },
+  disabled = { "swift" },
   rainbow = {
     enable = true,
     extended_mode = true,
