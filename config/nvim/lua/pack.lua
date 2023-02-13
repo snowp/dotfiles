@@ -21,11 +21,14 @@ return require('packer').startup(function(use)
     -- or                            , branch = '0.1.x',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
-
   use {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate'
   }
+  use { "bluz71/vim-nightfly-colors", as = "nightfly" }
+  use { "mbbill/undotree" }
+  use { "ThePrimeagen/harpoon" }
+  use { "tpope/vim-fugitive" }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

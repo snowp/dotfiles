@@ -1,3 +1,5 @@
+vim.cmd [[colorscheme nightfly]]
+
 local lsp_spinner = require "lsp_spinner"
 
 -- register an handler for `$/progress` method
@@ -48,7 +50,6 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<leader>k', vim.lsp.buf.formatting, bufopts)
 
   -- require("lsp_spinner").on_attach(client, bufnr)
 end

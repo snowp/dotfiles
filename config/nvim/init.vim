@@ -60,13 +60,9 @@ Plug 'mtdl9/vim-log-highlighting'
 Plug 'frazrepo/vim-rainbow'
 Plug 'sbdchd/neoformat'
 
-" Color scheme.
-Plug 'bluz71/vim-nightfly-guicolors'
-
 " Initialize plugin system
 call plug#end()
 
-syntax enable
 filetype plugin indent on
 
 if executable('~/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rust-analyzer')
@@ -76,8 +72,6 @@ if executable('~/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rust-analyz
         \   'whitelist': ['rust'],
         \ })
 endif
-
-
 
 if executable('sourcekit-lsp')
     au User lsp_setup call lsp#register_server({
@@ -89,11 +83,8 @@ endif
 
 autocmd FileType swift setlocal omnifunc=lsp#complete
 
-
 " nightly requires termguicolors
 set termguicolors
-set background=dark
-colorscheme nightfly
 
 " Run formatter on save
 " augroup fmt

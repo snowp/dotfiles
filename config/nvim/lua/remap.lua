@@ -34,7 +34,7 @@ vim.keymap.set('v', '<leader>p', '"+p')
 vim.keymap.set('v', '<leader>P', '"+P')
 
 -- Convenience navigate to init.vim + source it.
-vim.keymap.set('n',' <leader>sv', ':so $MYVIMRC<cr>')
+vim.keymap.set('n',' <leader>sv', ':source $MYVIMRC<cr>')
 vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<cr>')
 
 -- Allow escaping terminal mode with <Esc>
