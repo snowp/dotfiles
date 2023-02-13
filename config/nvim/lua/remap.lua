@@ -23,9 +23,9 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, remap_opts)
 
 -- Copy to clipboard
 vim.keymap.set('v', '<leader>y',  "+y")
-vim.keymap.set('n', '<leader>Y',  '"+yg_')
-vim.keymap.set('n', '<leader>y', '"+y')
-vim.keymap.set('n', '<leader>yy',  '"+yy')
+vim.keymap.set('n', '<leader>Y',  [["+yg_]])
+vim.keymap.set('n', '<leader>y', [["+y]])
+vim.keymap.set('n', '<leader>yy',  [["+yy]])
 
 -- Paste from clipboard
 vim.keymap.set('n', '<leader>p', '"+p')
