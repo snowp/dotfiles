@@ -1,3 +1,6 @@
+lua require('remap')
+lua require('pack')
+
 call plug#begin()
 " The default plugin directory will be as follows:
 "   - Vim (Linux/macOS): '~/.vim/plugged'
@@ -24,8 +27,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope-fzy-native.nvim'
-Plug 'nvim-telescope/telescope.nvim'
 
 " LSP and autocomplete.
 Plug 'neovim/nvim-lspconfig'
@@ -45,8 +46,6 @@ Plug 'ray-x/guihua.lua'
 Plug 'fatih/vim-go'
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'mfussenegger/nvim-dap'
-Plug 'nvim-treesitter/nvim-treesitter'
-
 
 " VCS
 Plug 'tpope/vim-fugitive'
@@ -101,9 +100,6 @@ colorscheme nightfly
 "   autocmd!
 "   autocmd BufWritePre * undojoin | Neoformat
 " augroup END
-
-" Use space as leader!
-let g:mapleader="\<Space>"
 
 set shell=$SHELL               " Set the default shell
 set termencoding=utf-8         " Set the default encodings just in case $LANG isn't set
@@ -168,19 +164,6 @@ set secure                  " Don't load autocmds from local .vimrc files
 set tags^=.tags,.git/tags   " Add local .tags file
 set signcolumn=yes
 
-nnoremap Q :quit<CR>
-
-" Easier save mapping
-nnoremap W :write<CR>
-
-nnoremap <Leader>f :Telescope git_files<cr>
-nnoremap <Leader>F :Telescope find_files<cr>
-nnoremap <Leader>r :Telescope live_grep<CR>
-nnoremap <Leader>b :Telescope buffers<CR>
-nnoremap <Leader>c :Telescope current_buffer_fuzzy_find<CR>
-nnoremap <Leader>h :Telescope command_history<CR>
-nnoremap <leader>l :FormatCode<cr>
-
 " Completion options
 set complete=.,w,b,u,t,kspell
 set wildmenu                                           " Better completion in the CLI
@@ -235,12 +218,6 @@ nnoremap <leader>p "+p
 nnoremap <leader>P "+P
 vnoremap <leader>p "+p
 vnoremap <leader>P "+P
-
-" Leave insert mode with jj
-inoremap jk <Esc>
-
-" Switch to the last file
-nnoremap <leader><leader> <C-^>
 
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ev :e $MYVIMRC<cr>

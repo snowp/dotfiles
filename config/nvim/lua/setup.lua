@@ -1,10 +1,3 @@
--- Configure LSP
-local remap_opts = { noremap=true, silent=true }
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, remap_opts)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, remap_opts)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, remap_opts)
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, remap_opts)
-
 local lsp_spinner = require "lsp_spinner"
 
 -- register an handler for `$/progress` method
@@ -294,18 +287,6 @@ vim.api.nvim_set_option('updatetime', 300)
 -- set signcolumn=yes
 -- autocmd CursorHold rust lua vim.diagnostic.open_float(nil, { focusable = false })
 -- ]])
-
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { "lua", "rust", "toml", "swift", "terraform", "yaml", "cpp", "json", "python" },
-  auto_install = true,
-  ident = { enable = true },
-  disabled = { "swift" },
-  rainbow = {
-    enable = true,
-    extended_mode = true,
-    max_file_lines = nil,
-  }
-}
 
 vim.wo.foldmethod = 'expr'
 vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
