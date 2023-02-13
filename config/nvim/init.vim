@@ -169,8 +169,9 @@ set complete=.,w,b,u,t,kspell
 set wildmenu                                           " Better completion in the CLI
 set wildmode=longest:full,full                         " Completion settings
 
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" ?? what are these for
+" inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Ignore these folders for completions
 set wildignore+=.hg,.git,.svn                          " Version control
@@ -206,23 +207,6 @@ let g:compe.source.vsnip = v:true
 let g:compe.source.ultisnips = v:true
 let g:compe.source.luasnip = v:true
 let g:compe.source.emoji = v:true
-
-" " Copy to clipboard
-vnoremap  <leader>y  "+y
-nnoremap  <leader>Y  "+yg_
-nnoremap  <leader>y  "+y
-nnoremap  <leader>yy  "+yy
-
-" " Paste from clipboard
-nnoremap <leader>p "+p
-nnoremap <leader>P "+P
-vnoremap <leader>p "+p
-vnoremap <leader>P "+P
-
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>ev :e $MYVIMRC<cr>
-" TODO figure out how to auto resolve this.
-nnoremap <leader>el :e $HOME/.config/nvim/lua/setup.lua<cr>
 
 augroup autoformat_settings
   autocmd FileType bzl AutoFormatBuffer buildifier
@@ -278,13 +262,6 @@ set statusline+=\ \ %P
 set statusline+=-%l
 set statusline+=-%c
 set statusline+=\ %{LspStatus()}
-
-" Allow escaping terminal mode with <Esc>
-tnoremap <Esc> <C-\><C-n>
-tnoremap jk <C-\><C-n>
-
-" Terminal splits
-nnoremap <leader>. :split \| resize 20 \| term<cr>
 
 " Set up debugger
 packadd termdebug
