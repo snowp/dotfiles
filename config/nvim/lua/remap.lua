@@ -22,16 +22,16 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, remap_opts)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, remap_opts)
 
 -- Copy to clipboard
-vim.keymap.set('v', '<leader>y',  "+y")
-vim.keymap.set('n', '<leader>Y',  [["+yg_]])
-vim.keymap.set('n', '<leader>y', [["+y]])
+vim.keymap.set('n', '<leader>y', "\"+y")
+vim.keymap.set('v', '<leader>y', "\"+y")
+vim.keymap.set('n', '<leader>Y', "\"+Y")
 vim.keymap.set('n', '<leader>yy',  [["+yy]])
 
 -- Paste from clipboard
-vim.keymap.set('n', '<leader>p', '"+p')
-vim.keymap.set('n', '<leader>P', '"+P')
-vim.keymap.set('v', '<leader>p', '"+p')
-vim.keymap.set('v', '<leader>P', '"+P')
+vim.keymap.set('n', '<leader>p', [["+p]])
+vim.keymap.set('n', '<leader>P', [["+P]])
+vim.keymap.set('v', '<leader>p', [["+p]])
+vim.keymap.set('v', '<leader>P', [["+P]])
 
 -- Convenience navigate to init.vim + source it.
 vim.keymap.set('n',' <leader>sv', ':source $MYVIMRC<cr>')
