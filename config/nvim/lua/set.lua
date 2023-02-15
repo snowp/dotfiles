@@ -1,4 +1,6 @@
 
+vim.opt.history = 1000 -- The number of history items to remember
+vim.opt.startofline = false -- Keep cursor in same place after saves
 vim.opt.nu = true
 vim.opt.relativenumber = true -- Use relative line numbers for easy jumping
 

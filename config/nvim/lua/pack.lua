@@ -61,6 +61,8 @@ return require('packer').startup(function(use)
   use { 'sbdchd/neoformat'}
   use { 'simrat39/rust-tools.nvim' }
 
+  use  { 'ThePrimeagen/vim-be-good' }
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
