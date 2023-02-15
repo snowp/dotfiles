@@ -5,7 +5,8 @@
 	rebase = false
 [color]
 	ui = auto
-  editor = nvim -u ~/.config/nvim/init-git.vim
+[core]
+  editor = nvim
 [init]
 	defaultBranch = main
 [url "ssh://git@github.com/"]
