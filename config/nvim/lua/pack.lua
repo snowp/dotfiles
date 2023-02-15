@@ -29,7 +29,7 @@ return require('packer').startup(function(use)
   use { "mbbill/undotree" }
   use { "ThePrimeagen/harpoon" }
   use { "tpope/vim-fugitive" }
-  
+
   -- LSP Support
   use {'neovim/nvim-lspconfig'}             -- Required
   use {'williamboman/mason.nvim'}           -- Optional
@@ -52,14 +52,12 @@ return require('packer').startup(function(use)
   use { 'tpope/vim-endwise'}
   use { 'tpope/vim-surround'}
   use { 'tpope/vim-commentary'}
-  use { 'tpope/vim-unimpaired'}
   use { 'google/vim-maktaba'}
   use { 'google/vim-codefmt'}
   use { 'google/vim-glaive'}
   use { 'airblade/vim-gitgutter'}
 
   use { 'mtdl9/vim-log-highlighting'}
-  use { 'frazrepo/vim-rainbow'}
   use { 'sbdchd/neoformat'}
   use { 'simrat39/rust-tools.nvim' }
 
