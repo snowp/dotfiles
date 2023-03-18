@@ -6,7 +6,6 @@ vim.keymap.set("n", "<leader>o", vim.cmd.Ex)
 
 -- Easier save mapping
 vim.keymap.set("n", "Q", ":quit<cr>")
-vim.keymap.set("n", "W", ":write<cr>")
 
 -- Leave insert mode with jj
 vim.keymap.set("i", "jk", "<Esc>")
@@ -33,13 +32,12 @@ vim.keymap.set('n', '<leader>P', [["+P]])
 vim.keymap.set('v', '<leader>p', [["+p]])
 vim.keymap.set('v', '<leader>P', [["+P]])
 
--- Convenience navigate to init.vim + source it.
-vim.keymap.set('n',' <leader>sv', ':source $MYVIMRC<cr>')
-vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<cr>')
-
 -- Allow escaping terminal mode with <Esc>
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
 vim.keymap.set('t', 'jk', '<C-\\><C-n>')
 
 -- Open terminal split
 vim.keymap.set('n', '<leader>.', ':split | resize 20 | term<cr>')
+
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+

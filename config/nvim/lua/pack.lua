@@ -30,10 +30,16 @@ return require('packer').startup(function(use)
   use { "ThePrimeagen/harpoon" }
   use { "tpope/vim-fugitive" }
 
+  use { 'nvim-lualine/lualine.nvim' }
+  use { 'kyazdani42/nvim-web-devicons', opt = true }
+  use { 'arkav/lualine-lsp-progress' }
+
+
+
   -- LSP Support
-  use {'neovim/nvim-lspconfig'}             -- Required
-  use {'williamboman/mason.nvim'}           -- Optional
-  use {'williamboman/mason-lspconfig.nvim'} -- Optional
+  use {'neovim/nvim-lspconfig'}             -- Used to configure lsp servers
+  use {'williamboman/mason.nvim'}           -- Used to download lsp servers
+  use {'williamboman/mason-lspconfig.nvim'} -- Integrates mason /w lspconfig
 
   -- Autocompletion
   use {'hrsh7th/nvim-cmp'}         -- Required

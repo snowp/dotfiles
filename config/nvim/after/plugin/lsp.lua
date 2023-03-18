@@ -49,7 +49,7 @@ local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local lspconfig = require('lspconfig')
 
-local lsp_attach = function(_, bufnr)
+local lsp_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -82,11 +82,21 @@ local rt = require("rust-tools")
 
 rt.setup({
   server = {
+    settings = {
+      ["rust-analyzer"] = {
+        cargo = {
+          allFeatures = true
+        },
+        checkOnSave = {
+          command = "clippy",
+        }
+      },
+    },
     on_attach = function(client, buffnr)
       -- Hover actions
-      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = buffnr })
       -- Code action groups
-      vim.keymap.set("n", "<leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+      vim.keymap.set("n", "<leader>a", rt.code_action_group.code_action_group, { buffer = buffnr })
 
       lsp_attach(client, buffnr)
     end
@@ -94,7 +104,7 @@ rt.setup({
 })
 
 vim.diagnostic.config({
-    virtual_text = false,
+    virtual_text = true,
     signs = true,
     update_in_insert = true,
     underline = true,
