@@ -36,7 +36,7 @@ return require('packer').startup(function(use)
 
   use { 'bluz71/vim-nightfly-colors',  as = 'nightfly' }
 
-  -- LSP Support
+ -- LSP Support
   use {'neovim/nvim-lspconfig'}             -- Used to configure lsp servers
   use {'williamboman/mason.nvim'}           -- Used to download lsp servers
   use {'williamboman/mason-lspconfig.nvim'} -- Integrates mason /w lspconfig
