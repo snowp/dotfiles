@@ -48,4 +48,6 @@ vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.opt.completeopt = {'menuone', 'noselect', 'noinsert'}
 vim.opt.shortmess = vim.opt.shortmess + { c = true}
 
-vim.cmd [[colorscheme nightfly]]
+vim.cmd [[colorscheme everforest]]
+vim.g.everforest_background = 'medium'
+vim.g.everforest_better_performance = 1

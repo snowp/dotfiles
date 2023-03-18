@@ -25,7 +25,7 @@ return require('packer').startup(function(use)
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate'
   }
-  use { "bluz71/vim-nightfly-colors", as = "nightfly" }
+  use { 'sainnhe/everforest' }
   use { "mbbill/undotree" }
   use { "ThePrimeagen/harpoon" }
   use { "tpope/vim-fugitive" }
