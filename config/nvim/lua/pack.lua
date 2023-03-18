@@ -34,7 +34,7 @@ return require('packer').startup(function(use)
   use { 'kyazdani42/nvim-web-devicons', opt = true }
   use { 'arkav/lualine-lsp-progress' }
 
-
+  use { 'bluz71/vim-nightfly-colors',  as = 'nightfly' }
 
   -- LSP Support
   use {'neovim/nvim-lspconfig'}             -- Used to configure lsp servers
