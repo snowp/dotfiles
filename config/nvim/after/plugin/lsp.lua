@@ -78,6 +78,12 @@ require('mason-lspconfig').setup_handlers({
   end
 })
 
+require("lspconfig").sourcekit.setup {
+  capabilities = lsp_capabilities,
+  filetypes = { "swift" },
+  on_attach = lsp_attach,
+}
+
 local rt = require("rust-tools")
 
 rt.setup({
@@ -87,20 +93,39 @@ rt.setup({
         cargo = {
           allFeatures = true
         },
-        checkOnSave = {
-          command = "clippy",
+        rustfmt = {
+          extraArgs = { "+nightly" },
+        },
+        completion = {
+          autoimport = { enable = true },
+        },
+        procMacro = {
+          enable = true,
+          attributes = { enable = true },
+        },
+        diagnostics = { enable = true,
+        disabled = {
+          "unresolved-proc-macro", -- Disables errors about proc macros not being expanded.
+        },
+        experimental = {
+          procAttrMacros = true,
         }
       },
+      lens = { enable = true },
+      checkOnSave = {
+        command = "clippy",
+      }
     },
-    on_attach = function(client, buffnr)
-      -- Hover actions
-      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = buffnr })
-      -- Code action groups
-      vim.keymap.set("n", "<leader>a", rt.code_action_group.code_action_group, { buffer = buffnr })
+  },
+  on_attach = function(client, buffnr)
+    -- Hover actions
+    vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = buffnr })
+    -- Code action groups
+    vim.keymap.set("n", "<leader>a", rt.code_action_group.code_action_group, { buffer = buffnr })
 
-      lsp_attach(client, buffnr)
-    end
-  }
+    lsp_attach(client, buffnr)
+  end
+}
 })
 
 vim.diagnostic.config({
