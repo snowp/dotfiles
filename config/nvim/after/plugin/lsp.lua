@@ -38,11 +38,27 @@ cmp.setup({
   },
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
+    { name = 'nvim_lsp_signature_help' },
     { name = 'luasnip' },
     { name = 'buffer' },
     { name = 'path' },
+    -- { name = 'vsnip' }, TODO try out vsnip vs luasnip?
     { name = 'nvim_lua' },
-  })
+  }),
+  formatting = {
+    fields = {'menu', 'abbr', 'kind'},
+    format = function(entry, item)
+      local menu_icon ={
+        nvim_lsp = 'λ',
+        vsnip = '⋗',
+        luasnip = '⋗',
+        buffer = 'Ω',
+        path = '🖫',
+      }
+      item.menu = menu_icon[entry.source.name]
+      return item
+    end,
+  },
 })
 
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -86,6 +102,9 @@ require("lspconfig").sourcekit.setup {
 
 local rt = require("rust-tools")
 
+local extension_path = vim.env.HOME .. '~/.local/share/nvim/mason/packages/codelldb/'
+local codelldb_path = extension_path .. 'codelldb'
+-- local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'  -- MacOS: This may be .dylib
 rt.setup({
   server = {
     settings = {
@@ -117,10 +136,19 @@ rt.setup({
       }
     },
   },
+  dap = {
+    adapter = require('rust-tools.dap').get_codelldb_adapter(
+        codelldb_path, '/opt/homebrew/opt/llvm/lib/liblldb.dylib')
+  },
+  runnables = { use_telescope = true },
+  debuggables = { use_telescope = true },
   on_attach = function(client, buffnr)
+    vim.keymap.set("n", "<leader>p", rt.parent_module.parent_module, { buffer = buffnr })
     -- Hover actions
     vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = buffnr })
+    vim.keymap.set("v", "<C-space>", rt.hover_range.hover_range, { buffer = buffnr })
     -- Code action groups
+    vim.keymap.set("n", "<leader>a", rt.code_action_group.code_action_group, { buffer = buffnr })
     vim.keymap.set("n", "<leader>a", rt.code_action_group.code_action_group, { buffer = buffnr })
 
     lsp_attach(client, buffnr)
@@ -128,8 +156,22 @@ rt.setup({
 }
 })
 
+-- LSP Diagnostics Options Setup 
+local sign = function(opts)
+  vim.fn.sign_define(opts.name, {
+    texthl = opts.name,
+    text = opts.text,
+    numhl = ''
+  })
+end
+
+sign({name = 'DiagnosticSignError', text = ''})
+sign({name = 'DiagnosticSignWarn', text = ''})
+sign({name = 'DiagnosticSignHint', text = ''})
+sign({name = 'DiagnosticSignInfo', text = ''})
+
 vim.diagnostic.config({
-    virtual_text = true,
+    virtual_text = false,
     signs = true,
     update_in_insert = true,
     underline = true,
@@ -142,3 +184,7 @@ vim.diagnostic.config({
     },
 })
 
+vim.cmd([[
+set signcolumn=yes
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+]])

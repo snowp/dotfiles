@@ -27,9 +27,10 @@ return require('packer').startup(function(use)
   use { "ThePrimeagen/harpoon" }
   use { "tpope/vim-fugitive" }
 
+  -- Better statusline
   use { 'nvim-lualine/lualine.nvim' }
-  use { 'kyazdani42/nvim-web-devicons', opt = true }
-  use { 'arkav/lualine-lsp-progress' }
+  use { 'arkav/lualine-lsp-progress' } -- Include LSP progress information
+  use { 'kyazdani42/nvim-web-devicons' } -- Nicer icons
 
   use { 'bluz71/vim-nightfly-colors',  as = 'nightfly' }
 
@@ -37,6 +38,14 @@ return require('packer').startup(function(use)
   use {'neovim/nvim-lspconfig'}             -- Used to configure lsp servers
   use {'williamboman/mason.nvim'}           -- Used to download lsp servers
   use {'williamboman/mason-lspconfig.nvim'} -- Integrates mason /w lspconfig
+  use {'mfussenegger/nvim-dap'}
+  use {'rcarriga/nvim-dap-ui'}
+
+  -- Nicer terminal experience
+  use 'voldikss/vim-floaterm'
+
+  -- Copilot!
+  use 'github/copilot.vim'
 
   -- Autocompletion
   use {'hrsh7th/nvim-cmp'}         -- Required
@@ -60,12 +69,17 @@ return require('packer').startup(function(use)
   use { 'google/vim-glaive'}
   use { 'airblade/vim-gitgutter'}
 
+  -- Lua caching to speed up load.
+  use 'lewis6991/impatient.nvim'
+
+  -- Auto highlight occurrences of word under cursor
+  use 'RRethy/vim-illuminate'
+
   use { 'mtdl9/vim-log-highlighting'}
   use { 'sbdchd/neoformat'}
   use { 'simrat39/rust-tools.nvim' }
 
-  use  { 'ThePrimeagen/vim-be-good' }
-
+  -- Pane showing all language symbols in current buffer
   use { 'simrat39/symbols-outline.nvim' }
 
   -- Automatically set up your configuration after cloning packer.nvim
