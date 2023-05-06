@@ -52,5 +52,6 @@
         "/Users/snowp/.local/share/nvim/plugged/cmp-vsnip/after",
         "${3rd}/luassert/library",
         "${3rd}/lfs/library"
-    ]
+    ],
+    "workspace.checkThirdParty": false
 }

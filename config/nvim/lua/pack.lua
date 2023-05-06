@@ -44,9 +44,6 @@ return require('packer').startup(function(use)
   -- Nicer terminal experience
   use 'voldikss/vim-floaterm'
 
-  -- Copilot!
-  use 'github/copilot.vim'
-
   -- Autocompletion
   use {'hrsh7th/nvim-cmp'}         -- Required
   use {'hrsh7th/cmp-nvim-lsp'}     -- Required
