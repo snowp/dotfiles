@@ -34,7 +34,7 @@ return require('packer').startup(function(use)
 
   use { 'bluz71/vim-nightfly-colors',  as = 'nightfly' }
 
- -- LSP Support
+  -- LSP Support
   use {'neovim/nvim-lspconfig'}             -- Used to configure lsp servers
   use {'williamboman/mason.nvim'}           -- Used to download lsp servers
   use {'williamboman/mason-lspconfig.nvim'} -- Integrates mason /w lspconfig
@@ -74,7 +74,9 @@ return require('packer').startup(function(use)
 
   use { 'mtdl9/vim-log-highlighting'}
   use { 'sbdchd/neoformat'}
-  use { 'simrat39/rust-tools.nvim' }
+
+  use { 'github/copilot.vim' }
+  -- use { "zbirenbaum/copilot-cmp" }
 
   -- Pane showing all language symbols in current buffer
   use { 'simrat39/symbols-outline.nvim' }
@@ -84,4 +86,27 @@ return require('packer').startup(function(use)
   if packer_bootstrap then
     require('packer').sync()
   end
+
+  use {
+    'VonHeikemen/lsp-zero.nvim',
+    branch = 'v1.x',
+    requires = {
+      -- LSP Support
+      {'neovim/nvim-lspconfig'},
+      {'williamboman/mason.nvim'},
+      {'williamboman/mason-lspconfig.nvim'},
+
+      -- Autocompletion
+      {'hrsh7th/nvim-cmp'},
+      {'hrsh7th/cmp-buffer'},
+      {'hrsh7th/cmp-path'},
+      {'saadparwaiz1/cmp_luasnip'},
+      {'hrsh7th/cmp-nvim-lsp'},
+      {'hrsh7th/cmp-nvim-lua'},
+
+      -- Snippets
+      {'L3MON4D3/LuaSnip'},
+      {'rafamadriz/friendly-snippets'},
+    }
+  }
 end)
