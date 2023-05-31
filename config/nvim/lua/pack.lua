@@ -40,6 +40,7 @@ return require('packer').startup(function(use)
   use {'williamboman/mason-lspconfig.nvim'} -- Integrates mason /w lspconfig
   use {'mfussenegger/nvim-dap'}
   use {'rcarriga/nvim-dap-ui'}
+  use {'onsails/lspkind-nvim'}              -- Nicer icons in completion
 
   -- Nicer terminal experience
   use 'voldikss/vim-floaterm'
