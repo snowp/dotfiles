@@ -34,7 +34,9 @@ local lsp_attach = function(client, bufnr)
   vim.keymap.set('n', '<leader>vrn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<leader>vrr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<leader>vd', vim.diagnostic.open_float, bufopts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = true, silent = true })
+
+  lsp.buffer_autoformat()
 end
 
 lsp.on_attach(lsp_attach)
@@ -100,3 +102,5 @@ vim.diagnostic.config({
         prefix = '',
     },
 })
+
+vim.cmd("autocmd BufWritePre <buffer> toml !topl fmt %")
