@@ -83,7 +83,10 @@ lspconfig.rust_analyzer.setup({
       ["rust-analyzer"] = {
         procMacro = {
           enable = true,
-        }
+        },
+        rustfmt = {
+          extraArgs = { "+nightly", },
+        },
       }
     }
   }
