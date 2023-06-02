@@ -83,17 +83,20 @@ lsp.skip_servers = { 'rust-analyzer' }
 lsp.setup()
 
 -- Add in extra flags for RA to work right. Note that we need to specify on_attach again otherwise it gets overwritten.
-local lspconfig = require('lspconfig')
-lspconfig.rust_analyzer.setup({
-  on_attach = lsp_attach,
-  settings = {
-    ["rust-analyzer"] = {
-      procMacro = {
-        enable = true,
-      },
-      rustfmt = {
-        extraArgs = { "+nightly" },
-      },
+local rust_tools = require('rust-tools')
+
+rust_tools.setup({
+  server = {
+    on_attach = lsp_attach,
+    settings = {
+      ["rust-analyzer"] = {
+        procMacro = {
+          enable = true,
+        },
+        rustfmt = {
+          extraArgs = { "+nightly" },
+        },
+      }
     }
   }
 })
@@ -113,4 +116,4 @@ vim.diagnostic.config({
   },
 })
 
-vim.cmd("autocmd BufWritePre <buffer> toml !topl fmt %")
+vim.cmd("autocmd BufWritePre <buffer> toml !taplo fmt %")
