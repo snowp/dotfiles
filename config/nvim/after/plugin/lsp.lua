@@ -38,7 +38,9 @@ local lsp_attach = function(client, bufnr)
   vim.keymap.set('n', '<leader>vrn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<leader>vrr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<leader>vf', vim.diagnostic.open_float, bufopts)
+  -- Displays all references of the symbol under the cursor in a Telescope view.
   vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = true, silent = true })
+  -- Displays all lsp diagnostics for the workspace in a Telescope view.
   vim.keymap.set("n", "<leader>vd", '<cmd>Telescope diagnostics<cr>')
 
   lsp.buffer_autoformat()
