@@ -17,13 +17,17 @@ lsp.setup_nvim_cmp({
   mapping = cmp_mappings
 })
 
+require("lsp-format").setup {}
+
 local lsp_attach = function(client, bufnr)
+  require("lsp-format").on_attach(client, bufnr)
+
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
@@ -43,68 +47,68 @@ end
 lsp.on_attach(lsp_attach)
 
 lsp.set_preferences({
-    suggest_lsp_servers = false,
-    sign_icons = {
-        error = 'E',
-        warn = 'W',
-        hint = 'H',
-        info = 'I'
-    }
+  suggest_lsp_servers = false,
+  sign_icons = {
+    error = 'E',
+    warn = 'W',
+    hint = 'H',
+    info = 'I'
+  }
 })
-
-lsp.setup()
 
 -- Add in copilot etc after lsp-zero has done its first pass of configuring cmp.
 cmp.setup({
   sources = {
-    {name = 'copilot'},
-    {name = 'nvim_lua'},
-    {name = 'path'},
-    {name = 'nvim_lsp'},
-    {name = 'buffer', keyword_length = 3},
-    {name = 'luasnip', keyword_length = 2},
+    { name = 'copilot' },
+    { name = 'nvim_lua' },
+    { name = 'path' },
+    { name = 'nvim_lsp' },
+    { name = 'buffer',  keyword_length = 3 },
+    { name = 'luasnip', keyword_length = 2 },
   },
   formatting = {
-    fields = {'abbr', 'kind', 'menu'},
+    fields = { 'abbr', 'kind', 'menu' },
     format = require('lspkind').cmp_format({
-      mode = 'symbol', -- show only symbol annotations
-      maxwidth = 50, -- prevent the popup from showing more than provided characters
+      mode = 'symbol',       -- show only symbol annotations
+      maxwidth = 50,         -- prevent the popup from showing more than provided characters
       ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
     })
   }
 })
 
+lsp.skip_servers = { 'rust-analyzer' }
+
+lsp.setup()
+
 -- Add in extra flags for RA to work right. Note that we need to specify on_attach again otherwise it gets overwritten.
 local lspconfig = require('lspconfig')
 lspconfig.rust_analyzer.setup({
   on_attach = lsp_attach,
-  server = {
-    settings = {
-      ["rust-analyzer"] = {
-        procMacro = {
-          enable = true,
-        },
-        rustfmt = {
-          extraArgs = { "+nightly", },
-        },
-      }
+  settings = {
+    ["rust-analyzer"] = {
+      procMacro = {
+        enable = true,
+      },
+      rustfmt = {
+        extraArgs = { "+nightly" },
+      },
     }
   }
 })
 
 -- Configure the diagnostic look and feel.
 vim.diagnostic.config({
-    virtual_text = true,
-    signs = true,
-    update_in_insert = false,
-    underline = true,
-    severity_sort = true,
-    float = {
-        border = 'rounded',
-        source = 'always',
-        header = '',
-        prefix = '',
-    },
+  virtual_text = true,
+  signs = true,
+  update_in_insert = false,
+  underline = true,
+  severity_sort = true,
+  float = {
+    border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+  },
 })
 
 vim.cmd("autocmd BufWritePre <buffer> toml !topl fmt %")

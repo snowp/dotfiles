@@ -41,6 +41,7 @@ return require('packer').startup(function(use)
   use {'mfussenegger/nvim-dap'}
   use {'rcarriga/nvim-dap-ui'}
   use {'onsails/lspkind-nvim'}              -- Nicer icons in completion
+  use "lukas-reineke/lsp-format.nvim"
 
   -- Nicer terminal experience
   use 'voldikss/vim-floaterm'
