@@ -18,9 +18,19 @@ lsp.setup_nvim_cmp({
 })
 
 require("lsp-format").setup {}
+require("inlay-hints").setup(
+  {
+    only_current_line = true,
+
+    eol = {
+      right_align = true,
+    }
+  }
+)
 
 local lsp_attach = function(client, bufnr)
   require("lsp-format").on_attach(client, bufnr)
+  require("inlay-hints").on_attach(client, bufnr)
 
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -31,10 +41,10 @@ local lsp_attach = function(client, bufnr)
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('n', '<leader>vh', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', '<leader>z', vim.lsp.buf.hover, bufopts)
   vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, bufopts)
-  vim.keymap.set('n', '<leader>va', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', '<leader>vrn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<leader>vrr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<leader>vf', vim.diagnostic.open_float, bufopts)
@@ -58,6 +68,10 @@ lsp.set_preferences({
   }
 })
 
+lsp.skip_servers = { 'rust-analyzer' }
+
+lsp.setup()
+
 -- Add in copilot etc after lsp-zero has done its first pass of configuring cmp.
 cmp.setup({
   sources = {
@@ -71,23 +85,33 @@ cmp.setup({
   formatting = {
     fields = { 'abbr', 'kind', 'menu' },
     format = require('lspkind').cmp_format({
-      mode = 'symbol',       -- show only symbol annotations
+      mode = 'symbol_text',  -- show symbol + name annotations
       maxwidth = 50,         -- prevent the popup from showing more than provided characters
       ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
     })
   }
 })
 
-lsp.skip_servers = { 'rust-analyzer' }
-
-lsp.setup()
-
 -- Add in extra flags for RA to work right. Note that we need to specify on_attach again otherwise it gets overwritten.
 local rust_tools = require('rust-tools')
 
 rust_tools.setup({
+  tools = {
+    on_initialized = function()
+      require("inlay-hints").set_all()
+    end,
+    inlay_hints = {
+      auto = false,
+    },
+  },
   server = {
-    on_attach = lsp_attach,
+    on_attach = function(client, bufnr)
+      lsp_attach(client, bufnr)
+
+      -- Replace the default LSP ones with the improved rust-tools versions.
+      vim.keymap.set("n", "<leader>z", rust_tools.hover_actions.hover_actions, { buffer = bufnr })
+      vim.keymap.set("n", "<leader>a", rust_tools.code_action_group.code_action_group, { buffer = bufnr })
+    end,
     settings = {
       ["rust-analyzer"] = {
         procMacro = {

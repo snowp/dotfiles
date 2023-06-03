@@ -42,7 +42,7 @@ return require('packer').startup(function(use)
   use { 'rcarriga/nvim-dap-ui' }
   use { 'onsails/lspkind-nvim' } -- Nicer icons in completion
   use "lukas-reineke/lsp-format.nvim"
-  -- rust-tools
+  use { 'simrat39/inlay-hints.nvim' }
   use { 'simrat39/rust-tools.nvim' }
 
   -- Nicer terminal experience
