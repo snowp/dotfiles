@@ -80,10 +80,10 @@ lsp.setup()
 -- Add in copilot etc after lsp-zero has done its first pass of configuring cmp.
 cmp.setup({
   sources = {
-    { name = 'copilot' },
     { name = 'nvim_lua' },
     { name = 'path' },
     { name = 'nvim_lsp' },
+    { name = 'copilot' }, -- Prefer LSP over copilot, too easy to accidentally pick the Copilot option by accident when you really want a well known symbol
     { name = 'buffer',  keyword_length = 3 },
     { name = 'luasnip', keyword_length = 2 },
   },
