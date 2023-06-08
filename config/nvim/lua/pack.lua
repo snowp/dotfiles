@@ -33,7 +33,7 @@ return require('packer').startup(function(use)
   use { 'onsails/lspkind-nvim' }      -- Nicer icons in completion
   -- use "lukas-reineke/lsp-format.nvim" -- Async formatting
   use { 'simrat39/inlay-hints.nvim' } -- Better inlay hints
-  -- use { 'simrat39/rust-tools.nvim' }  -- Better Rust LSP tools
+  use { 'simrat39/rust-tools.nvim' }  -- Better Rust LSP tools
 
   -- Nicer terminal experience
   use 'voldikss/vim-floaterm'
