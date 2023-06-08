@@ -42,6 +42,6 @@ colors:
     cyan:    '#7fdbca'
     white:   '#d6deeb'
 font:
-  size: 14
+  size: 12
   normal:
     family: 'DejaVuSansM Nerd Font' # https://www.nerdfonts.com/font-downloads

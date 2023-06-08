@@ -31,9 +31,9 @@ return require('packer').startup(function(use)
 
   -- LSP Support
   use { 'onsails/lspkind-nvim' }      -- Nicer icons in completion
-  use "lukas-reineke/lsp-format.nvim" -- Async formatting
+  -- use "lukas-reineke/lsp-format.nvim" -- Async formatting
   use { 'simrat39/inlay-hints.nvim' } -- Better inlay hints
-  use { 'simrat39/rust-tools.nvim' }  -- Better Rust LSP tools
+  -- use { 'simrat39/rust-tools.nvim' }  -- Better Rust LSP tools
 
   -- Nicer terminal experience
   use 'voldikss/vim-floaterm'
@@ -45,13 +45,13 @@ return require('packer').startup(function(use)
   use { 'tpope/vim-commentary' }
 
   -- For some reason removing this breaks Rust, debug this some day.
-  use {
-    'google/vim-codefmt',
-    requires = {
-      { 'google/vim-glaive' },
-      { 'google/vim-maktaba' }
-    }
-  }
+  -- use {
+  --   'google/vim-codefmt',
+  --   requires = {
+  --     { 'google/vim-glaive' },
+  --     { 'google/vim-maktaba' }
+  --   }
+  -- }
 
   -- Git diff in the gutter
   use { 'airblade/vim-gitgutter' }
@@ -76,6 +76,7 @@ return require('packer').startup(function(use)
       })
     end,
   }
+
   -- Copilot <-> cmp integration
   use {
     "zbirenbaum/copilot-cmp",

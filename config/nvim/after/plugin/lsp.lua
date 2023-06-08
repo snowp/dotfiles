@@ -17,10 +17,6 @@ lsp.setup_nvim_cmp({
   mapping = cmp_mappings
 })
 
--- Use lsp-format to get async format on save.
-local lsp_format = require('lsp-format')
-lsp_format.setup {}
-
 -- Use inlay-hints to get inlay hints only on the current line.
 local inlay_hints = require('inlay-hints')
 inlay_hints.setup(
@@ -30,7 +26,6 @@ inlay_hints.setup(
 )
 
 local lsp_attach = function(client, bufnr)
-  lsp_format.on_attach(client, bufnr)
   inlay_hints.on_attach(client, bufnr)
 
   -- Enable completion triggered by <c-x><c-o>
@@ -73,7 +68,7 @@ lsp.set_preferences({
 })
 
 -- Skip any LSP that we set up manually below.
-lsp.skip_servers = { 'rust-analyzer' }
+lsp.skip_servers = { 'clangd', 'rust-analyzer' }
 
 lsp.setup()
 
@@ -98,8 +93,8 @@ cmp.setup({
 })
 
 
--- Add in extra flags for RA to work right. Note that we need to specify on_attach again otherwise it gets overwritten.
-local rust_tools = require('rust-tools')
+-- -- Add in extra flags for RA to work right. Note that we need to specify on_attach again otherwise it gets overwritten.
+local rust_tools = require('rust-tools', 'clangd')
 
 rust_tools.setup({
   tools = {
@@ -129,6 +124,11 @@ rust_tools.setup({
       }
     }
   }
+})
+
+require('lspconfig').clangd.setup({
+  on_attach = lsp_attach,
+  filetypes = { 'c', 'cpp', 'cc' }
 })
 
 -- Configure the diagnostic look and feel.
