@@ -44,15 +44,6 @@ return require('packer').startup(function(use)
   use { 'tpope/vim-surround' }
   use { 'tpope/vim-commentary' }
 
-  -- For some reason removing this breaks Rust, debug this some day.
-  -- use {
-  --   'google/vim-codefmt',
-  --   requires = {
-  --     { 'google/vim-glaive' },
-  --     { 'google/vim-maktaba' }
-  --   }
-  -- }
-
   -- Git diff in the gutter
   use { 'airblade/vim-gitgutter' }
 
@@ -61,8 +52,6 @@ return require('packer').startup(function(use)
 
   -- Auto highlight occurrences of word under cursor
   use 'RRethy/vim-illuminate'
-
-  -- use { 'sbdchd/neoformat' }
 
   -- Copilot
   use {
