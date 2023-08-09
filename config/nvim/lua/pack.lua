@@ -22,6 +22,18 @@ return require('packer').startup(function(use)
   use { "ThePrimeagen/harpoon" }                               -- Quick navigating between files
   use { "tpope/vim-fugitive" }
 
+  use { "folke/trouble.nvim", 
+        requires = { { "nvim-tree/nvim-web-devicons" } },
+        config = function()
+          require("trouble").setup {
+              icons = true,
+              -- your configuration comes here
+              -- or leave it empty to use the default settings
+              -- refer to the configuration section below
+          }
+      end
+}
+
   -- Better statusline
   use { 'nvim-lualine/lualine.nvim' }
   use { 'arkav/lualine-lsp-progress' }   -- Include LSP progress information
@@ -34,6 +46,8 @@ return require('packer').startup(function(use)
   -- use "lukas-reineke/lsp-format.nvim" -- Async formatting
   use { 'simrat39/inlay-hints.nvim' } -- Better inlay hints
   use { 'simrat39/rust-tools.nvim' }  -- Better Rust LSP tools
+  use 'google/vim-maktaba' -- Required for vim-bazel
+  use 'bazelbuild/vim-bazel' -- Bazel support
 
   -- Nicer terminal experience
   use 'voldikss/vim-floaterm'

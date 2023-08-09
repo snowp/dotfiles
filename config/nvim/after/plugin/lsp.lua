@@ -47,10 +47,14 @@ local lsp_attach = function(client, bufnr)
 
   -- Display all symbols in the current workspace in a Telescope view.
   vim.keymap.set("n", "<leader>w", '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>', bufopts)
-  -- Displays all references of the symbol under the cursor in a Telescope view.
-  vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = true, silent = true })
-  -- Displays all lsp diagnostics for the workspace in a Telescope view.
-  vim.keymap.set("n", "<leader>vd", '<cmd>Telescope diagnostics<cr>')
+  -- Displays all references of the symbol under the cursor in a Trouble view.
+  vim.keymap.set('n', 'gr', '<cmd>TroubleToggle lsp_references<cr>', { buffer = true, silent = true })
+  -- Displays all lsp diagnostics for the file in a Trouble view.
+  vim.keymap.set("n", "<leader>vd", '<cmd>TroubleToggle document_diagnostics<cr>')
+  -- Displays all lsp diagnostics for the workspace in a Trouble view.
+  vim.keymap.set("n", "<leader>vD", '<cmd>TroubleToggle workspace_diagnostics<cr>')
+  -- Close out Trouble
+  vim.keymap.set("n", "<leader>x", '<cmd>TroubleToggle<cr>')
 
   lsp.buffer_autoformat()
 end
@@ -94,7 +98,7 @@ cmp.setup({
 
 
 -- -- Add in extra flags for RA to work right. Note that we need to specify on_attach again otherwise it gets overwritten.
-local rust_tools = require('rust-tools', 'clangd')
+local rust_tools = require('rust-tools')
 
 rust_tools.setup({
   tools = {
@@ -116,11 +120,15 @@ rust_tools.setup({
     settings = {
       ["rust-analyzer"] = {
         procMacro = {
-          enable = true,
+          enable = false,
         },
         rustfmt = {
           extraArgs = { "+nightly" },
         },
+        cargo = {
+          -- features =  { "all" },
+          extraEnv = vim.env.PATH,
+        }
       }
     }
   }
