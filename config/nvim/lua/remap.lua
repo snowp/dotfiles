@@ -40,5 +40,5 @@ vim.keymap.set('t', 'jk', '<C-\\><C-n>')
 vim.keymap.set('n', '<leader>.', ':split | resize 20 | term<cr>')
 vim.keymap.set('n', '<leader>,', ':FloatermToggle<cr>')
 
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+vim.keymap.set("n", "<C-F>", "<cmd>silent !tmux neww ~/.bin/tmux-sessionizer<CR>")
 

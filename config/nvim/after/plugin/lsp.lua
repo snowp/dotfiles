@@ -13,6 +13,9 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
   ["<C-Space>"] = cmp.mapping.complete(),
 })
 
+cmp_mappings["<Tab>"] = nil
+cmp_mappings["<S-Tab>"] = nil
+
 lsp.setup_nvim_cmp({
   mapping = cmp_mappings
 })
@@ -29,7 +32,7 @@ local lsp_attach = function(client, bufnr)
   inlay_hints.on_attach(client, bufnr)
 
   -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -42,6 +45,8 @@ local lsp_attach = function(client, bufnr)
   vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', '<leader>vrn', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<leader>?', vim.diagnostic.open_float, bufopts)
+  vim.keymap.set('n', '<leader>lr', '<cmd>:LspRestart<cr>')
+  vim.keymap.set('n', '<leader>ls', '<cmd>:LspStart<cr>')
 
   -- LSP specific telescope views.
 
@@ -78,13 +83,16 @@ lsp.setup()
 
 -- Add in copilot etc after lsp-zero has done its first pass of configuring cmp.
 cmp.setup({
+  completion = {
+    keyword_length = 2,
+    autocomplete = false,
+
+  },
   sources = {
     { name = 'nvim_lua' },
     { name = 'path' },
     { name = 'nvim_lsp' },
-    { name = 'copilot' }, -- Prefer LSP over copilot, too easy to accidentally pick the Copilot option by accident when you really want a well known symbol
     { name = 'buffer',  keyword_length = 3 },
-    { name = 'luasnip', keyword_length = 2 },
   },
   formatting = {
     fields = { 'abbr', 'kind', 'menu' },
@@ -96,6 +104,13 @@ cmp.setup({
   }
 })
 
+local function cargo_features(client)
+  local path = client.workspace_folders[1].name
+  if path == "/Users/snow/src/loop-api" then
+    client.config.settings["rust-analyzer"].cargo.features = { "docker-tests" }
+    client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+  end
+end
 
 -- -- Add in extra flags for RA to work right. Note that we need to specify on_attach again otherwise it gets overwritten.
 local rust_tools = require('rust-tools')
@@ -109,9 +124,18 @@ rust_tools.setup({
       auto = false,
     },
   },
+  dap = {
+    adapter = {
+      type = "executable",
+      command = "lldb-vscode",
+      name = "rt_lldb",
+    },
+  },
   server = {
     on_attach = function(client, bufnr)
       lsp_attach(client, bufnr)
+
+      cargo_features(client)
 
       -- Replace the default LSP ones with the improved rust-tools versions.
       vim.keymap.set("n", "<leader>q", rust_tools.hover_actions.hover_actions, { noremap = true, buffer = bufnr })
@@ -120,13 +144,13 @@ rust_tools.setup({
     settings = {
       ["rust-analyzer"] = {
         procMacro = {
-          enable = false,
+          -- For some repos proc macros slow things down so much
+          -- enable = false,
         },
         rustfmt = {
           extraArgs = { "+nightly" },
         },
         cargo = {
-          -- features =  { "all" },
           extraEnv = vim.env.PATH,
         }
       }
@@ -137,6 +161,20 @@ rust_tools.setup({
 require('lspconfig').clangd.setup({
   on_attach = lsp_attach,
   filetypes = { 'c', 'cpp', 'cc' }
+})
+
+require('lspconfig').pest_ls.setup({
+})
+
+require('lspconfig').lua_ls.setup({
+  on_attach = lsp_attach,
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { 'vim' }
+      }
+    }
+  }
 })
 
 -- Configure the diagnostic look and feel.
