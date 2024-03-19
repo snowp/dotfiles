@@ -1,4 +1,3 @@
-lua require('impatient')
 lua require('remap')
 lua require('pack')
 lua require('set')
