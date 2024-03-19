@@ -1,23 +1,15 @@
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
 -- Use sane defaults
-lsp.preset("recommended")
-
--- Prompt to install RA if its missing
-lsp.ensure_installed({
-  "rust_analyzer",
-})
+lsp_zero.preset("recommended")
 
 local cmp = require('cmp')
-local cmp_mappings = lsp.defaults.cmp_mappings({
-  ["<C-Space>"] = cmp.mapping.complete(),
-})
+local cmp_action = lsp_zero.cmp_action()
 
-cmp_mappings["<Tab>"] = nil
-cmp_mappings["<S-Tab>"] = nil
-
-lsp.setup_nvim_cmp({
-  mapping = cmp_mappings
+local cmp_mappings = lsp_zero.defaults.cmp_mappings({
+  ["<C-Space>"] = cmp_action.toggle_completion(),
+  ["<Tab>"] = nil,
+  ["<S-Tab>"] = nil,
 })
 
 -- Use inlay-hints to get inlay hints only on the current line.
@@ -30,15 +22,14 @@ inlay_hints.setup(
 
 local lsp_attach = function(client, bufnr)
   inlay_hints.on_attach(client, bufnr)
+  lsp_zero.default_keymaps({ buffer = bufnr })
 
   -- Enable completion triggered by <c-x><c-o>
   -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  -- Mappings.
+  -- Extra Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
   vim.keymap.set('n', '<leader>q', vim.lsp.buf.hover, bufopts)
   vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
@@ -61,12 +52,22 @@ local lsp_attach = function(client, bufnr)
   -- Close out Trouble
   vim.keymap.set("n", "<leader>x", '<cmd>TroubleToggle<cr>')
 
-  lsp.buffer_autoformat()
+  lsp_zero.buffer_autoformat()
 end
+lsp_zero.on_attach(lsp_attach)
 
-lsp.on_attach(lsp_attach)
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp_zero.default_setup,
+  },
+  ensure_installed = { 'rust_analyzer', 'pest_ls' },
+  -- Skip any LSP that we set up manually below.
+  clangd = lsp_zero.noop,
+  rust_analyzer = lsp_zero.noop,
+})
 
-lsp.set_preferences({
+lsp_zero.set_preferences({
   suggest_lsp_servers = false,
   sign_icons = {
     error = 'E',
@@ -76,32 +77,45 @@ lsp.set_preferences({
   }
 })
 
--- Skip any LSP that we set up manually below.
-lsp.skip_servers = { 'clangd', 'rust-analyzer' }
+lsp_zero.setup()
 
-lsp.setup()
-
--- Add in copilot etc after lsp-zero has done its first pass of configuring cmp.
 cmp.setup({
+  window = {
+    documentation = cmp.config.window.bordered(),
+  },
+  preselect = 'item',
   completion = {
     keyword_length = 2,
     autocomplete = false,
-
+    completeopt = 'menu,menuone,noinsert',
   },
   sources = {
-    { name = 'nvim_lua' },
-    { name = 'path' },
     { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
+    { name = 'luasnip' },
+    { name = 'path' },
     { name = 'buffer',  keyword_length = 3 },
   },
-  formatting = {
-    fields = { 'abbr', 'kind', 'menu' },
-    format = require('lspkind').cmp_format({
-      mode = 'symbol_text',  -- show symbol + name annotations
-      maxwidth = 50,         -- prevent the popup from showing more than provided characters
-      ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
-    })
-  }
+  formatting = lsp_zero.cmp_format(),
+  mapping = cmp.mapping.preset.insert({
+    -- confirm completion item
+    ['<CR>'] = cmp.mapping.confirm({ select = false }),
+
+    -- toggle completion menu
+    ['<C-space>'] = cmp_action.toggle_completion(),
+
+    -- tab complete
+    ['<Tab>'] = nil,
+    ['<S-Tab>'] = ni,
+
+    -- navigate between snippet placeholder
+    ['<C-d>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+
+    -- scroll documentation window
+    ['<C-f>'] = cmp.mapping.scroll_docs(-5),
+    ['<C-d>'] = cmp.mapping.scroll_docs(5),
+  }),
 })
 
 local function cargo_features(client)
@@ -163,19 +177,11 @@ require('lspconfig').clangd.setup({
   filetypes = { 'c', 'cpp', 'cc' }
 })
 
-require('lspconfig').pest_ls.setup({
-})
+require('lspconfig').pest_ls.setup({})
+require('lspconfig').sqlls.setup({})
 
-require('lspconfig').lua_ls.setup({
-  on_attach = lsp_attach,
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { 'vim' }
-      }
-    }
-  }
-})
+local lua_opts = require('lsp-zero').nvim_lua_ls()
+require('lspconfig').lua_ls.setup(lua_opts)
 
 -- Configure the diagnostic look and feel.
 vim.diagnostic.config({
