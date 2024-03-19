@@ -16,22 +16,6 @@ return {
     end
   },
 
-  -- mini.nvim: A collection of small, focused plugins
-  {
-    'echasnovski/mini.nvim',
-    config = function()
-      -- Better a/i text objects
-      require('mini.ai').setup()
-
-      -- Utiliity functions for dealing with surrounding text (brackets, etc)
-      require('mini.surround').setup()
-      require('mini.operators').setup()
-
-      -- Navigate with brackets
-      require('mini.bracketed').setup()
-    end
-  },
-
   -- Color scheme
   { 'bluz71/vim-nightfly-colors',      name = 'nightfly' },
 
@@ -47,13 +31,8 @@ return {
 
   'mfussenegger/nvim-dap',
 
-
   -- Nicer terminal experience
   'voldikss/vim-floaterm',
-
-  'junegunn/vim-easy-align',
-  'tpope/vim-endwise',
-  'tpope/vim-commentary',
 
   -- Git diff in the gutter
   'airblade/vim-gitgutter',
