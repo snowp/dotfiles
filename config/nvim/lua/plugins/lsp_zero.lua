@@ -71,12 +71,16 @@ return {
       end
       lsp_zero.on_attach(lsp_attach)
 
+      require('neodev').setup({
+        library = { plugins = { "neotest" }, types = true }
+      })
+
       require('mason').setup({})
       require('mason-lspconfig').setup({
         handlers = {
           lsp_zero.default_setup,
         },
-        ensure_installed = { 'rust_analyzer', 'pest_ls' },
+        ensure_installed = { 'pest_ls' },
         -- Skip any LSP that we set up manually below.
         clangd = lsp_zero.noop,
         rust_analyzer = lsp_zero.noop,
@@ -124,15 +128,13 @@ return {
 
           -- tab complete
           ['<Tab>'] = nil,
-          ['<S-Tab>'] = ni,
+          ['<S-Tab>'] = nil,
 
           -- navigate between snippet placeholder
-          ['<C-d>'] = cmp_action.luasnip_jump_forward(),
           ['<C-b>'] = cmp_action.luasnip_jump_backward(),
 
           -- scroll documentation window
           ['<C-f>'] = cmp.mapping.scroll_docs(-5),
-          ['<C-d>'] = cmp.mapping.scroll_docs(5),
         }),
       })
 
@@ -145,9 +147,7 @@ return {
       end
 
       -- -- Add in extra flags for RA to work right. Note that we need to specify on_attach again otherwise it gets overwritten.
-      local rust_tools = require('rust-tools')
-
-      rust_tools.setup({
+      vim.g.rustaceanvim = {
         tools = {
           on_initialized = function()
             require("inlay-hints").set_all()
@@ -170,15 +170,26 @@ return {
             cargo_features(client)
 
             -- Replace the default LSP ones with the improved rust-tools versions.
-            vim.keymap.set("n", "<leader>q", rust_tools.hover_actions.hover_actions, { noremap = true, buffer = bufnr })
-            vim.keymap.set("n", "<leader>a", rust_tools.code_action_group.code_action_group,
+            vim.keymap.set("n", "<leader>q",
+              function() vim.cmd.RustLsp { 'hover', 'actions' } end,
+              { noremap = true, buffer = bufnr })
+            vim.keymap.set("n", "<leader>a",
+              function() vim.cmd.RustLsp('codeAction') end,
+              { noremap = true, buffer = bufnr })
+            vim.keymap.set("n", "<leader>vT",
+              function() vim.cmd.RustLsp('testables') end,
+              { noremap = true, buffer = bufnr })
+            vim.keymap.set("n", "<leader>vD",
+              function() vim.cmd.RustLsp('externalDocs') end,
+              { noremap = true, buffer = bufnr })
+            vim.keymap.set("n", "<leader>vE",
+              function() vim.cmd.RustLsp('explainError') end,
               { noremap = true, buffer = bufnr })
           end,
           settings = {
             ["rust-analyzer"] = {
-              procMacro = {
-                -- For some repos proc macros slow things down so much
-                -- enable = false,
+              files = {
+                excludeDirs = { "target", "node_modules", ".git", ".nx", ".verdaccio" },
               },
               rustfmt = {
                 extraArgs = { "+nightly" },
@@ -189,18 +200,34 @@ return {
             }
           }
         }
-      })
+      }
 
-      require('lspconfig').clangd.setup({
+      local lspconfig = require('lspconfig')
+
+      lspconfig.clangd.setup({
         on_attach = lsp_attach,
         filetypes = { 'c', 'cpp', 'cc' }
       })
 
-      require('lspconfig').pest_ls.setup({})
-      require('lspconfig').sqlls.setup({})
+      lspconfig.pest_ls.setup({})
+      lspconfig.sqlls.setup({})
+      lspconfig.tsserver.setup({
+        root_dir = lspconfig.util.root_pattern("tsconfig.json"),
+        single_file_support = false,
+      })
 
-      local lua_opts = require('lsp-zero').nvim_lua_ls()
-      require('lspconfig').lua_ls.setup(lua_opts)
+      lspconfig.eslint.setup({
+        root_dir = lspconfig.util.root_pattern("tsconfig.eslint.json"),
+        on_attach = function(_, bufnr)
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            command = "EslintFixAll",
+          })
+        end,
+      })
+
+      local lua_opts = lsp_zero.nvim_lua_ls()
+      lspconfig.lua_ls.setup(lua_opts)
 
       -- Configure the diagnostic look and feel.
       vim.diagnostic.config({
@@ -217,7 +244,12 @@ return {
         },
       })
 
-      -- vim.cmd("autocmd BufWritePre <buffer> toml !taplo fmt %")
+      -- Associate the right file type with Cocoapod files.
+      local auto_command_on = vim.api.nvim_create_autocmd
+      auto_command_on({ "BufRead", "BufNewFile" }, {
+        pattern = { "*.podspec", "Podfile" },
+        command = "set filetype=ruby",
+      })
     end
   }
 }

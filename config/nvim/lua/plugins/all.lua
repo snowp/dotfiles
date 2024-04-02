@@ -20,16 +20,38 @@ return {
   { 'bluz71/vim-nightfly-colors',      name = 'nightfly' },
 
   -- LSP Support
-  'onsails/lspkind-nvim',                                          -- Nicer icons in completion
   'keith/swift.vim',
-  'pest-parser/pest.vim',                                          -- Pest syntax highlighting
+  'pest-parser/pest.vim',      -- Pest syntax highlighting
 
-  'simrat39/inlay-hints.nvim',                                     -- Better inlay hints
-  'simrat39/rust-tools.nvim',                                      -- Better Rust LSP tools
+  'simrat39/inlay-hints.nvim', -- Better inlay hints
+  {
+    'mrcjkb/rustaceanvim',
+    version = '^4', -- Recommended
+    ft = { 'rust' },
+  },
+
+  { "folke/neodev.nvim",    opts = {} },
+
+  {
+    "christoomey/vim-tmux-navigator",
+    cmd = {
+      "TmuxNavigateLeft",
+      "TmuxNavigateDown",
+      "TmuxNavigateUp",
+      "TmuxNavigateRight",
+      "TmuxNavigatePrevious",
+    },
+    keys = {
+      { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
+      { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
+      { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
+      { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
+      { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+    },
+  },
+
 
   { 'bazelbuild/vim-bazel', dependencies = 'google/vim-maktaba' }, -- Bazel support
-
-  'mfussenegger/nvim-dap',
 
   -- Nicer terminal experience
   'voldikss/vim-floaterm',

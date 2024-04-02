@@ -26,7 +26,23 @@ return {
       require('mini.comment').setup()
 
       -- Automatically insert pairs of characters
-      require('mini.pairs').setup()
+      require('mini.pairs').setup(
+        {
+          -- Exclude ' as it messes with Rust lifetime syntax
+          -- Exclude ` as it messes with multiline quoted strings in .md etc.
+          mappings = {
+            ['('] = { action = 'open', pair = '()', neigh_pattern = '[^\\].' },
+            ['['] = { action = 'open', pair = '[]', neigh_pattern = '[^\\].' },
+            ['{'] = { action = 'open', pair = '{}', neigh_pattern = '[^\\].' },
+
+            [')'] = { action = 'close', pair = '()', neigh_pattern = '[^\\].' },
+            [']'] = { action = 'close', pair = '[]', neigh_pattern = '[^\\].' },
+            ['}'] = { action = 'close', pair = '{}', neigh_pattern = '[^\\].' },
+
+            ['"'] = { action = 'closeopen', pair = '""', neigh_pattern = '[^\\].', register = { cr = false } },
+          },
+        }
+      )
 
       -- Move lines and blocks of text around
       require('mini.move').setup()
