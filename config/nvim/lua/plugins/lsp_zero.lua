@@ -1,32 +1,13 @@
 return {
   -- LSP bundle
   {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
-    dependencies = {
-      -- LSP Support
-      'neovim/nvim-lspconfig',
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
-
-      -- Autocompletion
-      'hrsh7th/nvim-cmp',
-      'hrsh7th/cmp-buffer',
-      'hrsh7th/cmp-path',
-      'saadparwaiz1/cmp_luasnip',
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-nvim-lua',
-
-      -- Snippets
-      'L3MON4D3/LuaSnip',
-      'rafamadriz/friendly-snippets',
-    },
+    'neovim/nvim-lspconfig',
     config = function()
-      local lsp_zero = require('lsp-zero')
-
-      -- Use sane defaults
-      lsp_zero.preset("recommended")
-
+      -- local lsp_zero = require('lsp-zero')
+      --
+      -- -- Use sane defaults
+      -- lsp_zero.preset("recommended")
+      --
       -- Use inlay-hints to get inlay hints only on the current line.
       local inlay_hints = require('inlay-hints')
       inlay_hints.setup(
@@ -37,15 +18,13 @@ return {
 
       local lsp_attach = function(client, bufnr)
         inlay_hints.on_attach(client, bufnr)
-        lsp_zero.default_keymaps({ buffer = bufnr })
+        -- lsp_zero.default_keymaps({ buffer = bufnr })
 
         -- Enable completion triggered by <c-x><c-o>
         -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
         -- Extra Mappings.
         -- See `:help vim.lsp.*` for documentation on any of the below functions
-        print("setting lsp bindings")
-        -- print(debug.traceback())
         local bufopts = { noremap = true, silent = true, buffer = bufnr }
         vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
         vim.keymap.set('n', '<leader>q', vim.lsp.buf.hover, bufopts)
@@ -61,142 +40,35 @@ return {
         -- Display all symbols in the current workspace in a Telescope view.
         vim.keymap.set("n", "<leader>w", '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>', bufopts)
 
-        lsp_zero.buffer_autoformat()
+        -- lsp_zero.buffer_autoformat()
       end
-      lsp_zero.on_attach(lsp_attach)
-
-      require('neodev').setup({
-        library = { plugins = { "neotest" }, types = true }
-      })
+      -- lsp_zero.on_attach(lsp_attach)
 
       require('mason').setup({})
       require("mason-lspconfig").setup_handlers {
         ["rust_analyzer"] = function() end,
       }
       require('mason-lspconfig').setup({
-        handlers = {
-          lsp_zero.default_setup,
-        },
+        -- handlers = {
+        --   lsp_zero.default_setup,
+        -- },
         ensure_installed = { 'pest_ls' },
         -- Skip any LSP that we set up manually below.
-        clangd = lsp_zero.noop,
-        rust_analyzer = lsp_zero.noop,
+        -- clangd = lsp_zero.noop,
+        -- rust_analyzer = lsp_zero.noop,
       })
 
-      lsp_zero.set_preferences({
-        suggest_lsp_servers = false,
-        sign_icons = {
-          error = 'E',
-          warn = 'W',
-          hint = 'H',
-          info = 'I'
-        }
-      })
-
-      lsp_zero.setup()
-
-      local cmp = require('cmp')
-      local cmp_action = lsp_zero.cmp_action()
-
-      cmp.setup({
-        window = {
-          documentation = cmp.config.window.bordered(),
-        },
-        preselect = 'item',
-        completion = {
-          keyword_length = 2,
-          autocomplete = false,
-          completeopt = 'menu,menuone,noinsert',
-        },
-        sources = {
-          { name = 'nvim_lsp' },
-          { name = 'nvim_lua' },
-          { name = 'luasnip' },
-          { name = 'path' },
-        },
-        formatting = lsp_zero.cmp_format(),
-        mapping = cmp.mapping.preset.insert({
-          -- confirm completion item
-          ['<CR>'] = cmp.mapping.confirm({ select = false }),
-
-          -- toggle completion menu
-          ['<C-space>'] = cmp_action.toggle_completion(),
-
-          -- tab complete
-          ['<Tab>'] = nil,
-          ['<S-Tab>'] = nil,
-
-          -- navigate between snippet placeholder
-          ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-
-          -- scroll documentation window
-          ['<C-f>'] = cmp.mapping.scroll_docs(-5),
-        }),
-      })
-
-      local function cargo_features(client)
-        local path = client.workspace_folders[1].name
-        if path == "/Users/snow/src/loop-api" then
-          client.config.settings["rust-analyzer"].cargo.features = { "docker-tests" }
-          client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-        end
-      end
-
-      -- -- Add in extra flags for RA to work right. Note that we need to specify on_attach again otherwise it gets overwritten.
-      vim.g.rustaceanvim = {
-        tools = {
-          on_initialized = function()
-            require("inlay-hints").set_all()
-          end,
-          inlay_hints = {
-            auto = false,
-          },
-        },
-        dap = {
-          adapter = {
-            type = "executable",
-            command = "lldb-vscode",
-            name = "rt_lldb",
-          },
-        },
-        server = {
-          on_attach = function(client, bufnr)
-            lsp_attach(client, bufnr)
-
-            cargo_features(client)
-
-            print("overriding default lsp bindings")
-            -- Replace the default LSP ones with the improved rust-tools versions.
-            vim.keymap.set("n", "<leader>q",
-              function() vim.cmd.RustLsp { 'hover', 'actions' } end,
-              { noremap = true, buffer = bufnr })
-            vim.keymap.set("n", "<leader>a",
-              function()
-                vim.cmd.RustLsp('codeAction')
-              end,
-              { noremap = true, buffer = bufnr })
-            vim.keymap.set("n", "<leader>vT",
-              function() vim.cmd.RustLsp('testables') end,
-              { noremap = true, buffer = bufnr })
-            vim.keymap.set("n", "<leader>vE",
-              function() vim.cmd.RustLsp('explainError') end,
-              { noremap = true, buffer = bufnr })
-          end,
-          settings = {
-            ["rust-analyzer"] = {
-              files = {
-                excludeDirs = { "target", "node_modules", ".git", ".nx", ".verdaccio" },
-              },
-              rustfmt = {
-                extraArgs = { "+nightly" },
-              },
-              cargo = {
-                extraEnv = vim.env.PATH,
-              }
-            }
-          }
-        }
-      }
+      -- lsp_zero.set_preferences({
+      --   suggest_lsp_servers = false,
+      --   sign_icons = {
+      --     error = 'E',
+      --     warn = 'W',
+      --     hint = 'H',
+      --     info = 'I'
+      --   }
+      -- })
+      --
+      -- lsp_zero.setup()
 
       local lspconfig = require('lspconfig')
 
@@ -221,9 +93,6 @@ return {
           })
         end,
       })
-
-      local lua_opts = lsp_zero.nvim_lua_ls()
-      lspconfig.lua_ls.setup(lua_opts)
 
       lspconfig.sourcekit.setup({
         on_attach = lsp_attach,
@@ -257,6 +126,64 @@ return {
         pattern = { "*.podspec", "Podfile" },
         command = "set filetype=ruby",
       })
-    end
-  }
+    end,
+    dependencies = {
+      -- LSP Support
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
+    },
+
+  },
+    -- Autocompletion
+    {
+      'hrsh7th/nvim-cmp',
+      config = function()
+        local cmp = require('cmp')
+
+        print("setup cmp")
+        cmp.setup({
+          window = {
+            documentation = cmp.config.window.bordered(),
+          },
+          preselect = 'item',
+          completion = {
+            keyword_length = 2,
+            autocomplete = false,
+            completeopt = 'menu,menuone,noinsert',
+          },
+          sources = {
+            { name = 'nvim_lsp' },
+            { name = 'nvim_lua' },
+            { name = 'luasnip' },
+            { name = 'path' },
+          },
+          -- formatting = lsp_zero.cmp_format(),
+          mapping = cmp.mapping.preset.insert({
+            -- confirm completion item
+            ['<CR>'] = cmp.mapping.confirm({ select = false }),
+
+            -- toggle completion menu
+            ['<C-space>'] = cmp.mapping.complete(),
+
+            -- tab complete
+            ['<Tab>'] = nil,
+            ['<S-Tab>'] = nil,
+
+            -- scroll documentation window
+            ['<C-f>'] = cmp.mapping.scroll_docs(-5),
+          }),
+        })
+      end,
+      dependencies = {
+        'hrsh7th/cmp-buffer',
+        'hrsh7th/cmp-path',
+        'saadparwaiz1/cmp_luasnip',
+        'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/cmp-nvim-lua',
+      }
+    },
+
+    -- Snippets
+    'L3MON4D3/LuaSnip',
+    'rafamadriz/friendly-snippets',
 }

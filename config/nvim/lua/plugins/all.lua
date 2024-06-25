@@ -9,7 +9,6 @@ return {
   {
     "folke/trouble.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    branch = 'dev',
     keys = {
       {
         "<leader>xx",
@@ -57,14 +56,84 @@ return {
   'keith/swift.vim',
   'pest-parser/pest.vim',      -- Pest syntax highlighting
 
-  'simrat39/inlay-hints.nvim', -- Better inlay hints
   {
     'mrcjkb/rustaceanvim',
     version = '^4', -- Recommended
     ft = { 'rust' },
-  },
+    dependencies = {
+      'nvim-lllua/plenary.nvim',
+      'nvim-lua/popup.nvim',
+      'simrat39/inlay-hints.nvim',
+    },
+    config = function()
+      local function cargo_features(client)
+        local path = client.workspace_folders[1].name
+        if path == "/Users/snow/src/loop-api" then
+          client.config.settings["rust-analyzer"].cargo.features = { "docker-tests" }
+          client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+        end
+      end
+  
+      local inlay_hints = require("inlay-hints")
 
-  { "folke/neodev.nvim",    opts = {} },
+      -- -- Add in extra flags for RA to work right. Note that we need to specify on_attach again otherwise it gets overwritten.
+      vim.g.rustaceanvim = {
+        tools = {
+          on_initialized = function()
+            -- inlay_hints.set_all()
+          end,
+          inlay_hints = {
+            auto = false,
+          },
+        },
+        dap = {
+          adapter = {
+            type = "executable",
+            command = "lldb-vscode",
+            name = "rt_lldb",
+          },
+        },
+        server = {
+          on_attach = function(client, bufnr)
+            -- inlay_hints.on_attach(client, bufnr)
+
+            cargo_features(client)
+
+            -- Replace the default LSP ones with the improved rust-tools versions.
+            vim.keymap.set("n", "<leader>q",
+              function() vim.cmd.RustLsp { 'hover', 'actions' } end,
+              { noremap = true, buffer = bufnr })
+            vim.keymap.set("n", "<leader>a",
+              function()
+                vim.cmd.RustLsp('codeAction')
+              end,
+              { noremap = true, buffer = bufnr })
+            vim.keymap.set("n", "<leader>vT",
+              function() vim.cmd.RustLsp('testables') end,
+              { noremap = true, buffer = bufnr })
+            vim.keymap.set("n", "<leader>vE",
+              function() vim.cmd.RustLsp('explainError') end,
+              { noremap = true, buffer = bufnr })
+            vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+            vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+          end,
+          settings = {
+            ["rust-analyzer"] = {
+              files = {
+                excludeDirs = { "target", "node_modules", ".git", ".nx", ".verdaccio" },
+              },
+              rustfmt = {
+                extraArgs = { "+nightly" },
+              },
+              cargo = {
+                extraEnv = vim.env.PATH,
+              }
+            }
+          }
+        }
+      }
+    end,
+  },
 
   {
     "christoomey/vim-tmux-navigator",
