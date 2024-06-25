@@ -44,6 +44,8 @@ return {
 
         -- Extra Mappings.
         -- See `:help vim.lsp.*` for documentation on any of the below functions
+        print("setting lsp bindings")
+        -- print(debug.traceback())
         local bufopts = { noremap = true, silent = true, buffer = bufnr }
         vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
         vim.keymap.set('n', '<leader>q', vim.lsp.buf.hover, bufopts)
@@ -58,14 +60,6 @@ return {
 
         -- Display all symbols in the current workspace in a Telescope view.
         vim.keymap.set("n", "<leader>w", '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>', bufopts)
-        -- Displays all references of the symbol under the cursor in a Trouble view.
-        vim.keymap.set('n', 'gr', '<cmd>TroubleToggle lsp_references<cr>', { buffer = true, silent = true })
-        -- Displays all lsp diagnostics for the file in a Trouble view.
-        vim.keymap.set("n", "<leader>vd", '<cmd>TroubleToggle document_diagnostics<cr>')
-        -- Displays all lsp diagnostics for the workspace in a Trouble view.
-        vim.keymap.set("n", "<leader>vD", '<cmd>TroubleToggle workspace_diagnostics<cr>')
-        -- Close out Trouble
-        vim.keymap.set("n", "<leader>x", '<cmd>TroubleToggle<cr>')
 
         lsp_zero.buffer_autoformat()
       end
@@ -76,6 +70,9 @@ return {
       })
 
       require('mason').setup({})
+      require("mason-lspconfig").setup_handlers {
+        ["rust_analyzer"] = function() end,
+      }
       require('mason-lspconfig').setup({
         handlers = {
           lsp_zero.default_setup,
@@ -116,7 +113,6 @@ return {
           { name = 'nvim_lua' },
           { name = 'luasnip' },
           { name = 'path' },
-          { name = 'buffer',  keyword_length = 3 },
         },
         formatting = lsp_zero.cmp_format(),
         mapping = cmp.mapping.preset.insert({
@@ -169,18 +165,18 @@ return {
 
             cargo_features(client)
 
+            print("overriding default lsp bindings")
             -- Replace the default LSP ones with the improved rust-tools versions.
             vim.keymap.set("n", "<leader>q",
               function() vim.cmd.RustLsp { 'hover', 'actions' } end,
               { noremap = true, buffer = bufnr })
             vim.keymap.set("n", "<leader>a",
-              function() vim.cmd.RustLsp('codeAction') end,
+              function()
+                vim.cmd.RustLsp('codeAction')
+              end,
               { noremap = true, buffer = bufnr })
             vim.keymap.set("n", "<leader>vT",
               function() vim.cmd.RustLsp('testables') end,
-              { noremap = true, buffer = bufnr })
-            vim.keymap.set("n", "<leader>vD",
-              function() vim.cmd.RustLsp('externalDocs') end,
               { noremap = true, buffer = bufnr })
             vim.keymap.set("n", "<leader>vE",
               function() vim.cmd.RustLsp('explainError') end,
@@ -228,6 +224,17 @@ return {
 
       local lua_opts = lsp_zero.nvim_lua_ls()
       lspconfig.lua_ls.setup(lua_opts)
+
+      lspconfig.sourcekit.setup({
+        on_attach = lsp_attach,
+        capabilities = {
+          workspace = {
+            didChangeWatchedFiles = {
+              dynamicRegistration = true,
+            },
+          },
+        },
+      })
 
       -- Configure the diagnostic look and feel.
       vim.diagnostic.config({
