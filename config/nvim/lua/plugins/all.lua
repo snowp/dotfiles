@@ -21,12 +21,12 @@ return {
         desc = "Buffer Diagnostics (Trouble)",
       },
       {
-        "<leader>cs",
+        "<leader>xs",
         "<cmd>Trouble symbols toggle focus=false<cr>",
         desc = "Symbols (Trouble)",
       },
       {
-        "<leader>cl",
+        "<leader>xr",
         "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
         desc = "LSP Definitions / references / ... (Trouble)",
       },
@@ -54,7 +54,7 @@ return {
 
   -- LSP Support
   'keith/swift.vim',
-  'pest-parser/pest.vim',      -- Pest syntax highlighting
+  'pest-parser/pest.vim', -- Pest syntax highlighting
 
   {
     'mrcjkb/rustaceanvim',
@@ -63,71 +63,49 @@ return {
     dependencies = {
       'nvim-lllua/plenary.nvim',
       'nvim-lua/popup.nvim',
-      'simrat39/inlay-hints.nvim',
     },
     config = function()
-      local function cargo_features(client)
-        local path = client.workspace_folders[1].name
-        if path == "/Users/snow/src/loop-api" then
-          client.config.settings["rust-analyzer"].cargo.features = { "docker-tests" }
-          client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-        end
-      end
-  
-      local inlay_hints = require("inlay-hints")
+      local augroup = vim.api.nvim_create_augroup("RustFormatting", {})
 
-      -- -- Add in extra flags for RA to work right. Note that we need to specify on_attach again otherwise it gets overwritten.
       vim.g.rustaceanvim = {
-        tools = {
-          on_initialized = function()
-            -- inlay_hints.set_all()
-          end,
-          inlay_hints = {
-            auto = false,
-          },
-        },
-        dap = {
-          adapter = {
-            type = "executable",
-            command = "lldb-vscode",
-            name = "rt_lldb",
-          },
-        },
         server = {
           on_attach = function(client, bufnr)
-            -- inlay_hints.on_attach(client, bufnr)
+            local opts = { noremap = false, silent = false, buffer = bufnr }
 
-            cargo_features(client)
-
+            print("Setting up Rust LSP keymaps")
             -- Replace the default LSP ones with the improved rust-tools versions.
             vim.keymap.set("n", "<leader>q",
               function() vim.cmd.RustLsp { 'hover', 'actions' } end,
-              { noremap = true, buffer = bufnr })
+              opts)
             vim.keymap.set("n", "<leader>a",
               function()
                 vim.cmd.RustLsp('codeAction')
               end,
-              { noremap = true, buffer = bufnr })
+              opts)
             vim.keymap.set("n", "<leader>vT",
               function() vim.cmd.RustLsp('testables') end,
-              { noremap = true, buffer = bufnr })
+              opts)
             vim.keymap.set("n", "<leader>vE",
               function() vim.cmd.RustLsp('explainError') end,
-              { noremap = true, buffer = bufnr })
-            vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-            vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+              opts)
+
+            vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              group = augroup,
+              buffer = bufnr,
+              callback = function()
+                vim.lsp.buf.format()
+              end,
+            })
           end,
           settings = {
             ["rust-analyzer"] = {
               files = {
                 excludeDirs = { "target", "node_modules", ".git", ".nx", ".verdaccio" },
               },
-              rustfmt = {
-                extraArgs = { "+nightly" },
-              },
-              cargo = {
-                extraEnv = vim.env.PATH,
-              }
+              -- rustfmt = {
+              --   extraArgs = { "+nightly" },
+              -- },
             }
           }
         }
