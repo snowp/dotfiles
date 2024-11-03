@@ -5,7 +5,16 @@ return {
       vim.api.nvim_create_autocmd('LspAttach', {
         desc = 'LSP actions',
         callback = function(event)
-          local opts = { noremap = true, buffer = event.buf, silent = false }
+          local opts = { buffer = event.buf, silent = false }
+
+          -- Avoid running this multiple times if we attach multiple LSP clients
+          -- This only matters because we have rustaceanvim which overrides some of these keybindings
+          -- and that seems to run after the Rust LSP client attaches.
+          if vim.b.lsp_attached then
+            return
+          end
+
+          vim.b.lsp_attached = true
 
           vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
           vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
@@ -17,8 +26,8 @@ return {
           vim.keymap.set('n', '<leader>vrn', vim.lsp.buf.rename, opts)
           vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, opts)
 
-          vim.keymap.set('n', '<leader>lr', '<cmd>:LspRestart<cr>')
-          vim.keymap.set('n', '<leader>ls', '<cmd>:LspStart<cr>')
+          vim.keymap.set('n', '<leader>lr', '<cmd>:LspRestart<cr>', opts)
+          vim.keymap.set('n', '<leader>ls', '<cmd>:LspStart<cr>', opts)
 
           -- LSP specific telescope views.
 
@@ -27,6 +36,7 @@ return {
         end
       })
 
+      -- Automatically format files on save, if the LSP supports formatting.
       local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
       local lsp_attach = function(client, bufnr)
         if client.supports_method("textDocument/formatting") then
@@ -42,17 +52,29 @@ return {
       end
 
       require('mason').setup({})
-      require("mason-lspconfig").setup_handlers {
-        ["rust_analyzer"] = function() end,
+      require('mason-lspconfig').setup({})
+
+      -- Configure the same Protobuf language server that VS Code uses.
+      local configs = require('lspconfig.configs')
+      local util = require('lspconfig.util')
+      configs.pls = {
+        default_config = {
+          cmd = { '/Users/snow/go/bin/protobuf-language-server' },
+          filetypes = { 'proto', 'cpp' },
+          -- If there is a buf.yaml config file in the root of the project, prefer using that
+          -- as the root directory for the language server. Otherwise, use the .git directory.
+          root_fir = util.root_pattern('buf.yaml', '.git'),
+          -- Sometimes cute symlinks used to get protoc to work are not recognized by the language
+          -- server, so fall back to single file support.
+          single_file_support = true,
+        }
       }
-      require('mason-lspconfig').setup({
-        ensure_installed = { 'pest_ls' },
-        handlers = {
-          ["rust_analyzer"] = function() end,
-        },
-      })
 
       local lspconfig = require('lspconfig')
+      lspconfig.pls.setup({
+        on_attach = lsp_attach,
+      })
+
       lspconfig.lua_ls.setup {
         on_init = function(client)
           local path = client.workspace_folders[1].name
@@ -86,7 +108,7 @@ return {
 
       lspconfig.pest_ls.setup({})
       lspconfig.sqlls.setup({})
-      lspconfig.tsserver.setup({
+      lspconfig.ts_ls.setup({
         root_dir = lspconfig.util.root_pattern("tsconfig.json"),
         single_file_support = false,
       })
@@ -139,7 +161,6 @@ return {
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
     },
-
   },
 
   {
@@ -196,6 +217,14 @@ return {
           ['<C-f>'] = cmp.mapping.scroll_docs(-5),
         }),
       })
+
+      cmp.setup.filetype({ "sql" },
+        {
+          sources = {
+            { name = 'vim-dadbod-completion' },
+            { name = 'buffer' },
+          },
+        })
     end,
     dependencies = {
       'hrsh7th/cmp-buffer',
