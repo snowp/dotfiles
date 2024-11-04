@@ -2,7 +2,6 @@ return {
   -- Selection plugin
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.5',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-live-grep-args.nvim',
@@ -38,6 +37,28 @@ return {
             theme = "ivy",
             hijack_netrw = true,
           }
+        },
+        mappings = {
+          i = {
+            ["<C-q>"] = require('telescope.actions').smart_send_to_qflist +
+                {
+                  action = function(prompt_buffer)
+                    print("called action")
+                    require('trouble').open('qflist')
+                  end
+                },
+            ["<C-x>"] = require('telescope.actions').smart_send_to_loclist + require('telescope.actions').open_loclist,
+          },
+          n = {
+            ["<C-q>"] = require('telescope.actions').smart_send_to_qflist +
+                {
+                  action = function(prompt_buffer)
+                    print("called action")
+                    require('trouble').open('qflist')
+                  end
+                },
+            ["<C-x>"] = require('telescope.actions').smart_send_to_loclist + require('telescope.actions').open_loclist,
+          },
         },
       })
 

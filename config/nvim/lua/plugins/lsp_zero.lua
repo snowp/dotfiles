@@ -149,6 +149,56 @@ return {
         },
       })
 
+      require('lspkind').init({
+        -- DEPRECATED (use mode instead): enables text annotations
+        --
+        -- default: true
+        -- with_text = true,
+
+        -- defines how annotations are shown
+        -- default: symbol
+        -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
+        mode = 'symbol',
+
+        -- default symbol map
+        -- can be either 'default' (requires nerd-fonts font) or
+        -- 'codicons' for codicon preset (requires vscode-codicons font)
+        --
+        -- default: 'default'
+        preset = 'codicons',
+
+        -- override preset symbols
+        --
+        -- default: {}
+        symbol_map = {
+          Text = "󰉿",
+          Method = "󰆧",
+          Function = "󰊕",
+          Constructor = "",
+          Field = "󰜢",
+          Variable = "󰀫",
+          Class = "󰠱",
+          Interface = "",
+          Module = "",
+          Property = "󰜢",
+          Unit = "󰑭",
+          Value = "󰎠",
+          Enum = "",
+          Keyword = "󰌋",
+          Snippet = "",
+          Color = "󰏘",
+          File = "󰈙",
+          Reference = "󰈇",
+          Folder = "󰉋",
+          EnumMember = "",
+          Constant = "󰏿",
+          Struct = "󰙅",
+          Event = "",
+          Operator = "󰆕",
+          TypeParameter = "",
+        },
+      })
+
       -- Associate the right file type with Cocoapod files.
       local auto_command_on = vim.api.nvim_create_autocmd
       auto_command_on({ "BufRead", "BufNewFile" }, {
@@ -160,6 +210,8 @@ return {
       -- LSP Support
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
+      -- Nicer cmp output
+      'onsails/lspkind.nvim'
     },
   },
 
@@ -186,13 +238,24 @@ return {
 
       cmp.setup({
         window = {
-          documentation = cmp.config.window.bordered(),
+          -- Making the documentation bordered results in nvim-cmp overlapping the documentation
+          -- and the suggestion window when the suggestion window is too long.
+          -- documentation = cmp.config.window.bordered(),
         },
         preselect = 'item',
         completion = {
           keyword_length = 2,
           autocomplete = false,
           completeopt = 'menu,menuone,noinsert',
+        },
+        formatting = {
+          -- Sometimes we get really long suggestions e.g. in Rust with long trait names + long module paths.
+          -- Limit this to make it more readable.
+          format = require('lspkind').cmp_format({
+            mode = "symbol",
+            maxwidth = 40,
+            ellipsis_char = "...",
+          }),
         },
         sources = {
           { name = 'nvim_lsp' },
@@ -201,7 +264,6 @@ return {
           { name = 'luasnip' },
           { name = 'path' },
         },
-        -- formatting = lsp_zero.cmp_format(),
         mapping = cmp.mapping.preset.insert({
           -- confirm completion item
           ['<CR>'] = cmp.mapping.confirm({ select = false }),
@@ -215,6 +277,7 @@ return {
 
           -- scroll documentation window
           ['<C-f>'] = cmp.mapping.scroll_docs(-5),
+          ['<C-b>'] = cmp.mapping.scroll_docs(5),
         }),
       })
 
@@ -233,6 +296,12 @@ return {
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-nvim-lua',
     }
+  },
+  {
+    'linrongbin16/lsp-progress.nvim',
+    config = function()
+      require('lsp-progress').setup()
+    end
   },
 
   -- Snippets

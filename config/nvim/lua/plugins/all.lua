@@ -3,26 +3,23 @@ return {
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
 
   -- Git integration
-  "tpope/vim-fugitive",
+  'tpope/vim-fugitive',
+
+  -- Improved spell checking
+  'kamykn/spelunker.vim',
 
   -- Color scheme
-  { 'bluz71/vim-nightfly-colors',      name = 'nightfly' },
-  { 'nordtheme/vim',                   name = 'nord' },
-  { "rebelot/kanagawa.nvim" },
+  { 'rebelot/kanagawa.nvim' },
 
   -- LSP Support
   'keith/swift.vim',
-  'pest-parser/pest.vim', -- Pest syntax highlighting
-
-
-
+  'pest-parser/pest.vim',                                          -- Pest syntax highlighting
   { 'bazelbuild/vim-bazel', dependencies = 'google/vim-maktaba' }, -- Bazel support
+  'github/copilot.vim',
 
   -- Nicer terminal experience
   'voldikss/vim-floaterm',
 
   -- Git diff in the gutter
   'airblade/vim-gitgutter',
-
-  'github/copilot.vim',
 }

@@ -14,7 +14,7 @@ return {
       require('mini.bracketed').setup()
 
       -- Show a notification window when LSP is running
-      require('mini.notify').setup()
+      -- require('mini.notify').setup()
 
       -- Show buffers in a tab line for easier ]b navigation
       require('mini.tabline').setup()
