@@ -75,6 +75,10 @@ return {
         on_attach = lsp_attach,
       })
 
+      lspconfig.terraformls.setup({
+        on_attach = lsp_attach,
+      })
+
       lspconfig.lua_ls.setup {
         on_init = function(client)
           local path = client.workspace_folders[1].name
@@ -104,6 +108,10 @@ return {
       lspconfig.clangd.setup({
         on_attach = lsp_attach,
         filetypes = { 'c', 'cpp', 'cc' }
+      })
+
+      lspconfig.taplo.setup({
+        on_attach = lsp_attach,
       })
 
       lspconfig.pest_ls.setup({})
@@ -240,7 +248,7 @@ return {
         window = {
           -- Making the documentation bordered results in nvim-cmp overlapping the documentation
           -- and the suggestion window when the suggestion window is too long.
-          -- documentation = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
         },
         preselect = 'item',
         completion = {

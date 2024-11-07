@@ -2,7 +2,9 @@
 	email = snowp@lyft.com
 	name = Snow Pettersen
 [pull]
-	rebase = false
+  rebase = false
+[push]
+  autoSetupRemote = yes
 [color]
 	ui = auto
 [core]
