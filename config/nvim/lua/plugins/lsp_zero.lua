@@ -120,6 +120,15 @@ return {
         root_dir = lspconfig.util.root_pattern("tsconfig.json"),
         single_file_support = false,
       })
+      -- lspconfig.prettier.setup({
+      --   filetypes = { 'javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'json', 'yaml', 'markdown' },
+      --   on_attach = function(_, bufnr)
+      --     vim.api.nvim_create_autocmd("BufWritePre", {
+      --       buffer = bufnr,
+      --       command = "Prettier"
+      --     })
+      --   end,
+      -- })
 
       lspconfig.eslint.setup({
         root_dir = lspconfig.util.root_pattern("tsconfig.eslint.json"),

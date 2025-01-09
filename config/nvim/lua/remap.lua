@@ -36,7 +36,7 @@ vim.keymap.set('v', '<leader>P', [["+P]])
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
 
 -- Open terminal split
-vim.keymap.set('n', '<leader>.', ':split | resize 20 | term<cr>')
+vim.keymap.set('n', '<leader>.', function() Snacks.terminal() end)
 vim.keymap.set('n', '<leader>,', ':FloatermToggle<cr>')
 
 vim.keymap.set("n", "<C-F>", "<cmd>silent !tmux neww ~/.bin/tmux-sessionizer<CR>")

@@ -4,19 +4,21 @@ return { {
   lazy = false,
   ---@type snacks.Config
   opts = {
-    bigfile = { enabled = true },
+    bigfile = {},
     notifier = {
-      enabled = true,
       timeout = 3000,
     },
-    quickfile = { enabled = true },
-    statuscolumn = { enabled = true },
-    words = { enabled = true },
+    indent = {},
+    animate = {},
+    quickfile = {},
+    statuscolumn = {},
+    input = {},
+    words = {},
     styles = {
       notification = {
-        wo = { wrap = true } -- Wrap notifications
+        wo = {} -- Wrap notifications
       }
-    }
+    },
   },
   keys = {
     { "<leader>un", function() Snacks.notifier.hide() end,           desc = "Dismiss All Notifications" },
@@ -70,7 +72,7 @@ return { {
         Snacks.toggle.diagnostics():map("<leader>ud")
         Snacks.toggle.line_number():map("<leader>ul")
         Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map(
-        "<leader>uc")
+          "<leader>uc")
         Snacks.toggle.treesitter():map("<leader>uT")
         Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
         Snacks.toggle.inlay_hints():map("<leader>uh")

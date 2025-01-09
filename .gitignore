@@ -1,4 +1,5 @@
 config/nvim/site
+config/nvim/spell
 
 !/config/alacritty
 !/config/nvim
