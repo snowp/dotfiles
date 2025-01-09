@@ -36,6 +36,8 @@ return {
         end
       })
 
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
+
       -- Automatically format files on save, if the LSP supports formatting.
       local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
       local lsp_attach = function(client, bufnr)
@@ -54,6 +56,60 @@ return {
       require('mason').setup({})
       require('mason-lspconfig').setup({})
 
+      local default_setup = { capabilities = capabilities, on_attach = lsp_attach }
+
+      local servers = {
+        pls = {},
+        terraformls = {},
+        lua_ls = {
+          on_init = function(client)
+            local path = client.workspace_folders[1].name
+            if vim.loop.fs_stat(path .. '/.luarc.json') or
+                vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+              return
+            end
+
+            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+              runtime = {
+                -- Tell the language server which version of Lua you're using
+                -- (most likely LuaJIT in the case of Neovim)
+                version = 'LuaJIT'
+              },
+              -- Make the server aware of Neovim runtime files
+              workspace = {
+                checkThirdParty = false,
+                library = {
+                  vim.env.VIMRUNTIME
+                }
+              }
+            })
+          end,
+        },
+        clangd = {
+          filetypes = { 'c', 'cpp', 'cc' },
+        },
+        taplo = {},
+        pest_ls = {},
+        sqlls = {},
+        ts_ls = {
+          root_dir = require('lspconfig').util.root_pattern("tsconfig.json"),
+          single_file_support = false,
+        },
+        eslint = {
+          root_dir = require('lspconfig').util.root_pattern("tsconfig.eslint.json"),
+        },
+        sourcekit = {
+          on_attach = lsp_attach,
+          capabilities = {
+            workspace = {
+              didChangeWatchedFiles = {
+                dynamicRegistration = true,
+              },
+            },
+          },
+        }
+      }
+
       -- Configure the same Protobuf language server that VS Code uses.
       local configs = require('lspconfig.configs')
       local util = require('lspconfig.util')
@@ -70,86 +126,11 @@ return {
         }
       }
 
-      local lspconfig = require('lspconfig')
-      lspconfig.pls.setup({
-        on_attach = lsp_attach,
-      })
+      for server, config in pairs(servers) do
+        local setup = vim.tbl_deep_extend('force', default_setup, config)
 
-      lspconfig.terraformls.setup({
-        on_attach = lsp_attach,
-      })
-
-      lspconfig.lua_ls.setup {
-        on_init = function(client)
-          local path = client.workspace_folders[1].name
-          if vim.loop.fs_stat(path .. '/.luarc.json') or
-              vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-            return
-          end
-
-          client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-            runtime = {
-              -- Tell the language server which version of Lua you're using
-              -- (most likely LuaJIT in the case of Neovim)
-              version = 'LuaJIT'
-            },
-            -- Make the server aware of Neovim runtime files
-            workspace = {
-              checkThirdParty = false,
-              library = {
-                vim.env.VIMRUNTIME
-              }
-            }
-          })
-        end,
-        on_attach = lsp_attach,
-      }
-
-      lspconfig.clangd.setup({
-        on_attach = lsp_attach,
-        filetypes = { 'c', 'cpp', 'cc' }
-      })
-
-      lspconfig.taplo.setup({
-        on_attach = lsp_attach,
-      })
-
-      lspconfig.pest_ls.setup({})
-      lspconfig.sqlls.setup({})
-      lspconfig.ts_ls.setup({
-        root_dir = lspconfig.util.root_pattern("tsconfig.json"),
-        single_file_support = false,
-      })
-      -- lspconfig.prettier.setup({
-      --   filetypes = { 'javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'json', 'yaml', 'markdown' },
-      --   on_attach = function(_, bufnr)
-      --     vim.api.nvim_create_autocmd("BufWritePre", {
-      --       buffer = bufnr,
-      --       command = "Prettier"
-      --     })
-      --   end,
-      -- })
-
-      lspconfig.eslint.setup({
-        root_dir = lspconfig.util.root_pattern("tsconfig.eslint.json"),
-        on_attach = function(_, bufnr)
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = bufnr,
-            command = "EslintFixAll",
-          })
-        end,
-      })
-
-      lspconfig.sourcekit.setup({
-        on_attach = lsp_attach,
-        capabilities = {
-          workspace = {
-            didChangeWatchedFiles = {
-              dynamicRegistration = true,
-            },
-          },
-        },
-      })
+        require('lspconfig')[server].setup(setup)
+      end
 
       -- Configure the diagnostic look and feel.
       vim.diagnostic.config({
@@ -227,6 +208,7 @@ return {
       -- LSP Support
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
+      'saghen/blink.cmp',
       -- Nicer cmp output
       'onsails/lspkind.nvim'
     },
@@ -248,72 +230,72 @@ return {
   },
 
   -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    config = function()
-      local cmp = require('cmp')
-
-      cmp.setup({
-        window = {
-          -- Making the documentation bordered results in nvim-cmp overlapping the documentation
-          -- and the suggestion window when the suggestion window is too long.
-          documentation = cmp.config.window.bordered(),
-        },
-        preselect = 'item',
-        completion = {
-          keyword_length = 2,
-          autocomplete = false,
-          completeopt = 'menu,menuone,noinsert',
-        },
-        formatting = {
-          -- Sometimes we get really long suggestions e.g. in Rust with long trait names + long module paths.
-          -- Limit this to make it more readable.
-          format = require('lspkind').cmp_format({
-            mode = "symbol",
-            maxwidth = 40,
-            ellipsis_char = "...",
-          }),
-        },
-        sources = {
-          { name = 'nvim_lsp' },
-          { name = 'nvim_lua' },
-          { name = 'lazydev' },
-          { name = 'luasnip' },
-          { name = 'path' },
-        },
-        mapping = cmp.mapping.preset.insert({
-          -- confirm completion item
-          ['<CR>'] = cmp.mapping.confirm({ select = false }),
-
-          -- toggle completion menu
-          ['<C-space>'] = cmp.mapping.complete(),
-
-          -- tab complete
-          ['<Tab>'] = nil,
-          ['<S-Tab>'] = nil,
-
-          -- scroll documentation window
-          ['<C-f>'] = cmp.mapping.scroll_docs(-5),
-          ['<C-b>'] = cmp.mapping.scroll_docs(5),
-        }),
-      })
-
-      cmp.setup.filetype({ "sql" },
-        {
-          sources = {
-            { name = 'vim-dadbod-completion' },
-            { name = 'buffer' },
-          },
-        })
-    end,
-    dependencies = {
-      'hrsh7th/cmp-buffer',
-      'hrsh7th/cmp-path',
-      'saadparwaiz1/cmp_luasnip',
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-nvim-lua',
-    }
-  },
+  -- {
+  --   'hrsh7th/nvim-cmp',
+  --   config = function()
+  --     local cmp = require('cmp')
+  --
+  --     cmp.setup({
+  --       window = {
+  --         -- Making the documentation bordered results in nvim-cmp overlapping the documentation
+  --         -- and the suggestion window when the suggestion window is too long.
+  --         documentation = cmp.config.window.bordered(),
+  --       },
+  --       preselect = 'item',
+  --       completion = {
+  --         keyword_length = 2,
+  --         autocomplete = false,
+  --         completeopt = 'menu,menuone,noinsert',
+  --       },
+  --       formatting = {
+  --         -- Sometimes we get really long suggestions e.g. in Rust with long trait names + long module paths.
+  --         -- Limit this to make it more readable.
+  --         format = require('lspkind').cmp_format({
+  --           mode = "symbol",
+  --           maxwidth = 40,
+  --           ellipsis_char = "...",
+  --         }),
+  --       },
+  --       sources = {
+  --         { name = 'nvim_lsp' },
+  --         { name = 'nvim_lua' },
+  --         { name = 'lazydev' },
+  --         { name = 'luasnip' },
+  --         { name = 'path' },
+  --       },
+  --       mapping = cmp.mapping.preset.insert({
+  --         -- confirm completion item
+  --         ['<CR>'] = cmp.mapping.confirm({ select = false }),
+  --
+  --         -- toggle completion menu
+  --         ['<C-space>'] = cmp.mapping.complete(),
+  --
+  --         -- tab complete
+  --         ['<Tab>'] = nil,
+  --         ['<S-Tab>'] = nil,
+  --
+  --         -- scroll documentation window
+  --         ['<C-f>'] = cmp.mapping.scroll_docs(-5),
+  --         ['<C-b>'] = cmp.mapping.scroll_docs(5),
+  --       }),
+  --     })
+  --
+  --     cmp.setup.filetype({ "sql" },
+  --       {
+  --         sources = {
+  --           { name = 'vim-dadbod-completion' },
+  --           { name = 'buffer' },
+  --         },
+  --       })
+  --   end,
+  --   dependencies = {
+  --     'hrsh7th/cmp-buffer',
+  --     'hrsh7th/cmp-path',
+  --     'saadparwaiz1/cmp_luasnip',
+  --     'hrsh7th/cmp-nvim-lsp',
+  --     'hrsh7th/cmp-nvim-lua',
+  --   }
+  -- },
   {
     'linrongbin16/lsp-progress.nvim',
     config = function()

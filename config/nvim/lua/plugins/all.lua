@@ -5,6 +5,7 @@ return {
   -- Git integration
   'tpope/vim-fugitive',
 
+
   -- Improved spell checking
   'kamykn/spelunker.vim',
 
