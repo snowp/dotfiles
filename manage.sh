@@ -2,10 +2,11 @@
 
 files=(\
   bin \
-  config \
+  config/nvim \
+  zshrc \
+  zsh \
   gitconfig \
   tmux.conf \
-  urlview \
 )
 
 custom_path() {
