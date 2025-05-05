@@ -51,3 +51,14 @@ vim.api.nvim_set_option('updatetime', 300)
 vim.cmd [[colorscheme kanagawa]]
 
 vim.cmd [[ filetype plugin on ]]
+
+-- Show special characters
+vim.opt.listchars = {
+  trail = '~',
+  tab = '>-',
+  nbsp = '␣'
+}
+vim.opt.list = true
+
+-- Mark the trailing whitespace marker red
+vim.fn.matchadd('ErrorMsg', [[\s\+$]])

@@ -41,6 +41,9 @@ macos_install() {
     lazygit
     make
     node
+    font-hack-nerd-font
+    skhd
+    koekeishiya/formulae/yabai
   )
 
   # If all the packages are installed then do nothing

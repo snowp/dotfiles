@@ -127,5 +127,3 @@ for file in ~/.zsh-private/*.zsh; do
     source $file
   fi
 done
-eval "$(atuin init zsh)"
-eval "$(atuin init zsh)"

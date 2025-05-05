@@ -1,6 +1,7 @@
+config
 config/nvim/site
 config/nvim/spell
 
-config
+# Exclude config/ with some exeptions
 !/config/nvim
 !/config/atuin
