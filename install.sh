@@ -76,6 +76,11 @@ if ! which rustup 2>/dev/null 1>/dev/null; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
 
+if ! which atuin 2>/dev/null 1>/dev/null; then
+  echo "++ Installing atuin"
+  bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
+fi
+
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
   echo "++ Installing oh-my-zsh"
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
