@@ -119,5 +119,13 @@ for file in ~/.zsh/*.zsh; do
     source $file
   fi
 done
+
+# Source all files in .zsh-private/
+# This is for private files that should not be in the public repo.
+for file in ~/.zsh-private/*.zsh; do
+  if [[ -f $file ]]; then
+    source $file
+  fi
+done
 eval "$(atuin init zsh)"
 eval "$(atuin init zsh)"
