@@ -3,6 +3,7 @@
 files=(\
   bin \
   config/nvim \
+  wezterm.lua \
   zshrc \
   zsh \
   gitconfig \

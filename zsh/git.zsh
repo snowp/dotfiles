@@ -1,0 +1,8 @@
+alias g='git'
+alias gap='git add --patch'
+alias gs='git status'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gp='git push'
+alias gco='git checkout'
+alias gcb='git checkout -b'
