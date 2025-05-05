@@ -5,7 +5,18 @@ return {
       'williamboman/mason.nvim',
     },
     config = function()
-      require('mason-lspconfig').setup({})
+      require('mason-lspconfig').setup({
+        ensure_installed = {
+          'bashls',
+          'clangd',
+          'eslint',
+          'lua_ls',
+          'pest_ls',
+          'sqlls',
+          'taplo',
+          'terraformls',
+        },
+      })
     end
   },
   {

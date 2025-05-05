@@ -63,6 +63,7 @@ return {
       local servers = {
         pls = {},
         gh_actions_ls = {},
+        bashls = {},
         terraformls = {},
         lua_ls = {
           on_init = function(client)
@@ -117,12 +118,15 @@ return {
         },
       })
 
+      -- Platform independent way to get the path to GOPATH.
+      local go_path = vim.fn.system('go env GOPATH')
+
       -- Configure the same Protobuf language server that VS Code uses.
       local configs = require('lspconfig.configs')
       local util = require('lspconfig.util')
       configs.pls = {
         default_config = {
-          cmd = { '/Users/snow/go/bin/protobuf-language-server' },
+          cmd = { go_path .. 'go/bin/protobuf-language-server' },
           filetypes = { 'proto', 'cpp' },
           -- If there is a buf.yaml config file in the root of the project, prefer using that
           -- as the root directory for the language server. Otherwise, use the .git directory.
@@ -154,6 +158,39 @@ return {
         },
       })
 
+      -- This sets up pretty icons for autocompletion and diagnostics.
+      require('lspkind').init({
+        mode = 'symbol',
+        preset = 'codicons',
+        symbol_map = {
+          Text = "󰉿",
+          Method = "󰆧",
+          Function = "󰊕",
+          Constructor = "",
+          Field = "󰜢",
+          Variable = "󰀫",
+          Class = "󰠱",
+          Interface = "",
+          Module = "",
+          Property = "󰜢",
+          Unit = "󰑭",
+          Value = "󰎠",
+          Enum = "",
+          Keyword = "󰌋",
+          Snippet = "",
+          Color = "󰏘",
+          File = "󰈙",
+          Reference = "󰈇",
+          Folder = "󰉋",
+          EnumMember = "",
+          Constant = "󰏿",
+          Struct = "󰙅",
+          Event = "",
+          Operator = "󰆕",
+          TypeParameter = "",
+        },
+      })
+
       -- Associate the right file type with Cocoapod files.
       local auto_command_on = vim.api.nvim_create_autocmd
       auto_command_on({ "BufRead", "BufNewFile" }, {
@@ -168,8 +205,25 @@ return {
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
       'saghen/blink.cmp',
+      'onsails/lspkind.nvim',
     },
   },
+
+  {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
+      },
+    },
+    dependencies = {
+      "Bilal2453/luvit-meta", -- optional `vim.uv` typings
+    },
+  },
+
   {
     'linrongbin16/lsp-progress.nvim',
     config = function()
