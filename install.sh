@@ -5,6 +5,7 @@ set -euo pipefail
 arch_install() {
   packages=(
     git
+    go
     ripgrep
     fzf
     fd
@@ -14,6 +15,7 @@ arch_install() {
     lazygit
     clang
     nodejs-lts-jod
+    npm
     ttf-hack-nerd
     zsh-autosuggestions
   )
@@ -24,18 +26,18 @@ arch_install() {
     return
   fi
 
-	sudo pacman -S "${packages[@]}"
+  sudo pacman -S "${packages[@]}"
 }
 
 arch_install
 
-if [[ -z ~/.tmux/plugins/tpm ]]; then
-	echo "++ Installing TPM (tmux pluing manager. Remember to hit prefix+I to install plugins from tmux."
-	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+  echo "++ Installing TPM (tmux plugin manager). Remember to hit prefix+I to install plugins from tmux."
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
 if ! which rustup 2>/dev/null 1>/dev/null; then
-echo "++ Installing rustup"
+  echo "++ Installing rustup"
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
 
@@ -46,5 +48,7 @@ fi
 
 target="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 if [ ! -d "$target" ]; then
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 fi
+
+go install github.com/lasorda/protobuf-language-server@latest

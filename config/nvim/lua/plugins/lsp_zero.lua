@@ -54,12 +54,24 @@ return {
       end
 
       require('mason').setup({})
-      require('mason-lspconfig').setup({})
+      require('mason-lspconfig').setup({
+        ensure_installed = {
+          'bashls',
+          'clangd',
+          'eslint',
+          'lua_ls',
+          'pest_ls',
+          'sqlls',
+          'taplo',
+          'terraformls',
+        },
+      })
 
       local default_setup = { capabilities = capabilities, on_attach = lsp_attach }
 
       local servers = {
         pls = {},
+        bashls = {},
         terraformls = {},
         lua_ls = {
           on_init = function(client)
@@ -110,12 +122,15 @@ return {
         }
       }
 
+      -- Platform independent way to get the path to GOPATH.
+      local go_path = vim.fn.system('go env GOPATH')
+
       -- Configure the same Protobuf language server that VS Code uses.
       local configs = require('lspconfig.configs')
       local util = require('lspconfig.util')
       configs.pls = {
         default_config = {
-          cmd = { '/Users/snow/go/bin/protobuf-language-server' },
+          cmd = { go_path .. 'go/bin/protobuf-language-server' },
           filetypes = { 'proto', 'cpp' },
           -- If there is a buf.yaml config file in the root of the project, prefer using that
           -- as the root directory for the language server. Otherwise, use the .git directory.
@@ -147,27 +162,10 @@ return {
         },
       })
 
+      -- This sets up pretty icons for autocompletion and diagnostics.
       require('lspkind').init({
-        -- DEPRECATED (use mode instead): enables text annotations
-        --
-        -- default: true
-        -- with_text = true,
-
-        -- defines how annotations are shown
-        -- default: symbol
-        -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
         mode = 'symbol',
-
-        -- default symbol map
-        -- can be either 'default' (requires nerd-fonts font) or
-        -- 'codicons' for codicon preset (requires vscode-codicons font)
-        --
-        -- default: 'default'
         preset = 'codicons',
-
-        -- override preset symbols
-        --
-        -- default: {}
         symbol_map = {
           Text = "󰉿",
           Method = "󰆧",
