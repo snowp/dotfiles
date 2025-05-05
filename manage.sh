@@ -2,6 +2,7 @@
 
 files=(\
   bin \
+  p10k.zsh \
   config/nvim \
   wezterm.lua \
   zshrc \

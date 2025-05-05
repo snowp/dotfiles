@@ -18,7 +18,6 @@ arch_install() {
     nodejs-lts-jod
     npm
     ttf-hack-nerd
-    zsh-autosuggestions
   )
 
   # If all the packages are installed then do nothing
@@ -30,7 +29,42 @@ arch_install() {
   sudo pacman -S "${packages[@]}"
 }
 
-arch_install
+macos_install() {
+  packages=(
+    go
+    ripgrep
+    fzf
+    fd
+    eza
+    zoxide
+    yq
+    lazygit
+    make
+    node
+  )
+
+  # If all the packages are installed then do nothing
+  if brew list "${packages[@]}" &>/dev/null; then
+    echo "All packages are already installed."
+    return
+  fi
+
+  brew install "${packages[@]}"
+}
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  if [ -f /etc/arch-release ]; then
+    arch_install
+  else
+    echo "Unsupported Linux distribution. Please install the required packages manually."
+    exit 1
+  fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  macos_install
+else
+  echo "Unsupported OS. Please install the required packages manually."
+  exit 1
+fi
 
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
   echo "++ Installing TPM (tmux plugin manager). Remember to hit prefix+I to install plugins from tmux."
