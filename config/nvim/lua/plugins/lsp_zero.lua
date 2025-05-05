@@ -41,6 +41,11 @@ return {
       -- Automatically format files on save, if the LSP supports formatting.
       local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
       local lsp_attach = function(client, bufnr)
+        -- Skip this if ts_ls is attached, since it will handle formatting.
+        if client.name == "ts_ls" then
+          return
+        end
+
         if client.supports_method("textDocument/formatting") then
           vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
           vim.api.nvim_create_autocmd("BufWritePre", {
@@ -53,13 +58,11 @@ return {
         end
       end
 
-      require('mason').setup({})
-      require('mason-lspconfig').setup({})
-
       local default_setup = { capabilities = capabilities, on_attach = lsp_attach }
 
       local servers = {
         pls = {},
+        gh_actions_ls = {},
         terraformls = {},
         lua_ls = {
           on_init = function(client)
@@ -92,12 +95,10 @@ return {
         pest_ls = {},
         sqlls = {},
         ts_ls = {
+          enabled = true,
           root_dir = require('lspconfig').util.root_pattern("tsconfig.json"),
-          single_file_support = false,
         },
-        eslint = {
-          root_dir = require('lspconfig').util.root_pattern("tsconfig.eslint.json"),
-        },
+        -- vtsls = {},
         sourcekit = {
           on_attach = lsp_attach,
           capabilities = {
@@ -109,6 +110,12 @@ return {
           },
         }
       }
+
+      vim.filetype.add({
+        pattern = {
+          ['.*/%.github[%w/]+workflows[%w/]+.*%.ya?ml'] = 'yaml.github',
+        },
+      })
 
       -- Configure the same Protobuf language server that VS Code uses.
       local configs = require('lspconfig.configs')
@@ -153,6 +160,8 @@ return {
         pattern = { "*.podspec", "Podfile" },
         command = "set filetype=ruby",
       })
+
+      require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
     end,
     dependencies = {
       -- LSP Support
@@ -171,4 +180,5 @@ return {
   -- Snippets
   'L3MON4D3/LuaSnip',
   'rafamadriz/friendly-snippets',
+  'stevearc/conform.nvim',
 }

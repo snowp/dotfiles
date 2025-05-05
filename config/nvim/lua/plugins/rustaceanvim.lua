@@ -3,8 +3,11 @@
 return {
   {
     'mrcjkb/rustaceanvim',
-    version = '^5', -- Recommended
+    version = '^6', -- Recommended
     ft = { 'rust' },
+    dependencies = {
+      'williamboman/mason.nvim',
+    },
     config = function()
       local augroup = vim.api.nvim_create_augroup("RustFormatting", {})
 
@@ -28,11 +31,49 @@ return {
                 vim.lsp.buf.format()
               end,
             })
+
+            vim.keymap.set("n", "<F2>", function()
+              require('dap').toggle_breakpoint()
+            end, { buffer = 0 })
+
+            vim.keymap.set("n", "<F6>", function()
+              require('dap').step_over()
+            end, { buffer = 0 })
+
+            vim.keymap.set("n", "<F7>", function()
+              require('dap').step_into()
+            end, { buffer = 0 })
+
+            vim.keymap.set("n", "<F8>", function()
+              require('dap').step_out()
+            end, { buffer = 0 })
           end,
           settings = {
             ["rust-analyzer"] = {
+              check = {
+                -- workspace = false,
+              },
               files = {
-                excludeDirs = { "target", "node_modules", ".git", ".nx", ".verdaccio" },
+                excludeDirs = {
+                  "target",
+                  "node_modules",
+                  ".git",
+                  ".nx",
+                  ".verdaccio",
+                  ".idea",
+                  ".sqlx",
+                  "bazel-bin",
+                  "bazel-out",
+                  "bazel-testlogs",
+                  "bazel-capture-sdk",
+                  "Capture.xcodeproj",
+                  "tmp",
+                  "gradle"
+                },
+              },
+              cargo = {
+                -- target wasm unknown
+                -- target = "wasm32-unknown-unknown",
               },
               rustfmt = {
                 extraArgs = { "+nightly" },

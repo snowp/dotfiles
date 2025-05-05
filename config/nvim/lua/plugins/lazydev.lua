@@ -9,6 +9,7 @@ return {
         { path = "luvit-meta/library", words = { "vim%.uv" } },
         { path = "snacks.nvim",        words = { "Snacks" } },
         { path = "lazy.nvim",          words = { "LazyVim" } },
+        { 'nvim-dap-ui' },
       },
     },
     dependencies = {

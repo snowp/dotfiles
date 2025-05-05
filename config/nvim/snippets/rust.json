@@ -1,0 +1,11 @@
+{
+    "atm": {
+        "prefix": "atm",
+        "body": [
+            "#[cfg(test)]",
+            "#[path = \"./${1:test_file}.rs\"]",
+            "mod tests;"
+        ],
+        "description": "#[cfg(test)]#[path = ...]"
+    }
+}
