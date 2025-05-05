@@ -42,7 +42,7 @@
   "swift.vim": { "branch": "master", "commit": "c76b52c68b633ad397ddab761c47efc7b5c1a6b9" },
   "trouble.nvim": { "branch": "main", "commit": "85bedb7eb7fa331a2ccbecb9202d8abba64d37b3" },
   "vim-bazel": { "branch": "master", "commit": "31b0d5e4f51da1aeb56d65bf505a744e6de405de" },
-  "vim-dadbod": { "branch": "master", "commit": "fe5a55e92b2dded7c404006147ef97fb073d8b1b" },
+  "vim-dadbod": { "branch": "master", "commit": "fa31d0ffeebaa59cf97a81e7f92194cced54a13f" },
   "vim-dadbod-completion": { "branch": "master", "commit": "a8dac0b3cf6132c80dc9b18bef36d4cf7a9e1fe6" },
   "vim-dadbod-ui": { "branch": "master", "commit": "460432301a5cb280ea265ddfa15c9f3dcd1d26b7" },
   "vim-floaterm": { "branch": "master", "commit": "204a01a3868cbe4549640dca857fb3880ee92b17" },

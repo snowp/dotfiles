@@ -6,6 +6,7 @@ arch_install() {
   packages=(
     git
     go
+    make
     ripgrep
     fzf
     fd
