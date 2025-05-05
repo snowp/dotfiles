@@ -119,3 +119,5 @@ for file in ~/.zsh/*.zsh; do
     source $file
   fi
 done
+eval "$(atuin init zsh)"
+eval "$(atuin init zsh)"

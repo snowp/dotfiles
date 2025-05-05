@@ -1,19 +1,19 @@
 #!/bin/bash
 
-files=(\
-  bin \
-  p10k.zsh \
-  config/nvim \
-  wezterm.lua \
-  zshrc \
-  zsh \
-  gitconfig \
-  tmux.conf \
+files=(
+  bin
+  p10k.zsh
+  config/nvim
+  config/atuin
+  wezterm.lua
+  zshrc
+  zsh
+  gitconfig
+  tmux.conf
 )
 
 custom_path() {
-  for i in "${!PATHS[@]}"
-  do
+  for i in "${!PATHS[@]}"; do
     if [[ "$1" == "$i" ]]; then
       return 0
     fi
@@ -54,16 +54,14 @@ unlink() {
 
 # Loops through and link all files without links
 install_links() {
-  for file in "${files[@]}"
-  do
+  for file in "${files[@]}"; do
     link "$file"
   done
 }
 
 # Function to remove all linked files
 remove_links() {
-  for file in "${files[@]}"
-  do
+  for file in "${files[@]}"; do
     unlink "$file"
   done
 }
