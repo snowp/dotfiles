@@ -1,9 +1,0 @@
-config
-config/nvim/site
-config/nvim/spell
-
-# Exclude config/ with some exeptions
-!/config/nvim
-!/config/yabai
-!/config/skhdrc
-!/config/atuin

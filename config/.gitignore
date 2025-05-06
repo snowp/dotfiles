@@ -1,6 +1,9 @@
 asciinema/
+alacritty/
+htop/
 fish/
 gh/
 wireshark/
 configstore/
 github-copilot/
+nvim/spell
