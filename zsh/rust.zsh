@@ -7,3 +7,7 @@ function rtest() {
 function rt() {
   cargo nextest run $@
 }
+
+function c() {
+  cargo $@
+}

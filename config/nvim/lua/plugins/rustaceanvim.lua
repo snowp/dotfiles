@@ -16,7 +16,11 @@ return {
           on_attach = function(client, bufnr)
             local opts = { silent = false, buffer = bufnr }
 
-            -- Replace the default LSP ones with the improved rustaceannvim versions.
+            -- Avoid conflicts with other LSP clients. Ideally we wouldn't run into this but its easier than trying to figure out
+            -- why the LSP client is attaching multiple times.
+            vim.b.lsp_attached = true
+
+            -- Replace the default LSP ones with the improved rustaceanvim versions.
             vim.keymap.set("n", "<leader>q", function() vim.cmd.RustLsp { 'hover', 'actions' } end, opts)
             vim.keymap.set("n", "<leader>a", function() vim.cmd.RustLsp('codeAction') end, opts)
             vim.keymap.set("n", "<leader>vT", function() vim.cmd.RustLsp('testables') end, opts)
