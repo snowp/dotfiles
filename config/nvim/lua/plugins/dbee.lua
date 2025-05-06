@@ -36,7 +36,9 @@ return {
     end,
     config = function()
       require("dbee").setup( --[[optional config]])
-      vim.keymap.set("n", "<leader>db", "lua require'dbee'.open()")
+      vim.keymap.set("n", "<leader>db", function()
+        require("dbee").toggle()
+      end, { desc = "Toggle DBEE" })
     end,
   },
 }
