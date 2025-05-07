@@ -20,17 +20,17 @@ return {
             target = "%1.rs",
             context = "test"
           },
-          -- Navigate from X.rs -> X_test.rs, making sure we avoid mapping X_test.rs to X_test_test.rs.
+          -- Navigate from X.rs -> X_test.rs, making sure we avoid mapping X_test.rs to X_test_test.r
           {
             pattern = function(file)
               local match = file:match("(.*).rs$")
               if match and not file:match("_test.rs$") then
-                return { match, "component" }
+                return { match, "impl for test file" }
               end
               return nil
             end,
             target = "%1_test.rs",
-            context = "lib"
+            context = "test file"
           }
         },
         style = {
