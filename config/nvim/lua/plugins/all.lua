@@ -2,9 +2,7 @@ return {
   -- Syntax parser / highlighter
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
 
-  -- Git integration
-  'tpope/vim-fugitive',
-
+  'hiphish/rainbow-delimiters.nvim',
 
   -- Improved spell checking
   'kamykn/spelunker.vim',
@@ -12,13 +10,13 @@ return {
   -- Color scheme
   { 'rebelot/kanagawa.nvim' },
   {
-    "webhooked/kanso.nvim",
+    'webhooked/kanso.nvim',
     lazy = false,
     priority = 1000,
   },
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
+    'catppuccin/nvim',
+    name = 'catppuccin',
     priority = 1000
   },
 
