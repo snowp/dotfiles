@@ -7,5 +7,12 @@
             "mod tests;"
         ],
         "description": "#[cfg(test)]#[path = ...]"
+    },
+    "default": {
+        "prefix": "dd",
+        "body": [
+            "..Default::default()"
+        ],
+        "description": "..Default::default()"
     }
 }

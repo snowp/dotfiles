@@ -27,9 +27,6 @@ return {
   'pest-parser/pest.vim',                                          -- Pest syntax highlighting
   { 'bazelbuild/vim-bazel', dependencies = 'google/vim-maktaba' }, -- Bazel support
 
-  -- Nicer terminal experience
-  'voldikss/vim-floaterm',
-
   -- Git diff in the gutter
   'airblade/vim-gitgutter',
 }
