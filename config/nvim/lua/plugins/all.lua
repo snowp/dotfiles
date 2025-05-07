@@ -26,7 +26,6 @@ return {
   'keith/swift.vim',
   'pest-parser/pest.vim',                                          -- Pest syntax highlighting
   { 'bazelbuild/vim-bazel', dependencies = 'google/vim-maktaba' }, -- Bazel support
-  'github/copilot.vim',
 
   -- Nicer terminal experience
   'voldikss/vim-floaterm',
