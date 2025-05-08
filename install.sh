@@ -50,7 +50,6 @@ macos_install() {
     wezterm
     tmux
     cmake
-    koekeishiya/formulae/yabai
   )
 
   # If all the packages are installed then do nothing
@@ -60,6 +59,7 @@ macos_install() {
   fi
 
   brew install "${packages[@]}"
+  brew install --cask nikitabobko/tap/aerospace
 }
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
