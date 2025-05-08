@@ -4,6 +4,7 @@
 files=(
   bin
   p10k.zsh
+  aerospace.toml
   config/nvim
   config/atuin
   config/yabai
