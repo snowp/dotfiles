@@ -1,5 +1,5 @@
+lua require('config.lazy')
 lua require('remap')
-lua require('pack')
 lua require('set')
 
 if executable('sourcekit-lsp')

@@ -31,9 +31,13 @@ arch_install() {
 
 macos_install() {
   packages=(
+    neovim
+    protobuf
+    flatbuffers
     go
     ripgrep
     fzf
+    gh
     fd
     eza
     zoxide
@@ -43,6 +47,9 @@ macos_install() {
     node
     font-hack-nerd-font
     skhd
+    wezterm
+    tmux
+    cmake
     koekeishiya/formulae/yabai
   )
 

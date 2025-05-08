@@ -1,10 +1,14 @@
 #!/bin/bash
 
+# TODO some of these are OS specific, would be nice to only install the ones we want.
 files=(
   bin
   p10k.zsh
   config/nvim
   config/atuin
+  config/yabai
+  config/skhd
+  config/
   wezterm.lua
   zshrc
   zsh

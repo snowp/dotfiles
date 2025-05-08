@@ -54,9 +54,9 @@ vim.cmd [[ filetype plugin on ]]
 
 -- Show special characters
 vim.opt.listchars = {
-  trail = '~',
-  tab = '>-',
-  nbsp = '␣'
+	trail = '~',
+	tab = '>-',
+	nbsp = '␣'
 }
 vim.opt.list = true
 

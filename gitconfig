@@ -11,12 +11,6 @@
   editor = nvim
 [init]
 	defaultBranch = main
-[url "ssh://git@github.com/"]
-	insteadOf = https://github.com/
-[alias]
-	root = rev-parse --show-toplevel
-[url "https://github.com/rust-lang/crates.io-index"]
-	insteadOf = https://github.com/rust-lang/crates.io-index
 
 [core]
   pager = delta
