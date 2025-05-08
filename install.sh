@@ -46,7 +46,6 @@ macos_install() {
     make
     node
     font-hack-nerd-font
-    skhd
     wezterm
     tmux
     cmake
