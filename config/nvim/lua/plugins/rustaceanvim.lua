@@ -13,7 +13,7 @@ return {
 
       vim.g.rustaceanvim = {
         server = {
-          on_attach = function(client, bufnr)
+          on_attach = function(_, bufnr)
             local opts = { silent = false, buffer = bufnr }
 
             -- Avoid conflicts with other LSP clients. Ideally we wouldn't run into this but its easier than trying to figure out
@@ -23,9 +23,10 @@ return {
             -- Replace the default LSP ones with the improved rustaceanvim versions.
             vim.keymap.set("n", "<leader>q", function() vim.cmd.RustLsp { 'hover', 'actions' } end, opts)
             vim.keymap.set("n", "<leader>a", function() vim.cmd.RustLsp('codeAction') end, opts)
-            vim.keymap.set("n", "<leader>vT", function() vim.cmd.RustLsp('testables') end, opts)
-            vim.keymap.set("n", "<leader>vE", function() vim.cmd.RustLsp('explainError') end, opts)
-            vim.keymap.set("n", "<leader>vC", function() vim.cmd.RustLsp('openCargo') end, opts)
+            vim.keymap.set("n", "<leader>vt", function() vim.cmd.RustLsp('testables') end, opts)
+            vim.keymap.set("n", "<leader>ve", function() vim.cmd.RustLsp('explainError') end, opts)
+            vim.keymap.set("n", "<leader>vr", function() vim.cmd.RustLsp('relatedDiagnostics') end, opts)
+            vim.keymap.set("n", "<leader>vc", function() vim.cmd.RustLsp('openCargo') end, opts)
 
             vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
             vim.api.nvim_create_autocmd("BufWritePre", {
@@ -74,10 +75,6 @@ return {
                   "tmp",
                   "gradle"
                 },
-              },
-              cargo = {
-                -- target wasm unknown
-                -- target = "wasm32-unknown-unknown",
               },
               rustfmt = {
                 extraArgs = { "+nightly" },
