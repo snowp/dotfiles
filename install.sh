@@ -31,24 +31,32 @@ arch_install() {
 
 macos_install() {
   packages=(
-    neovim
-    protobuf
+    act
+    awscli
+    bat
+    cmake
+    cocoapods
+    eza
+    fd
     flatbuffers
-    go
-    ripgrep
+    font-hack-nerd-font
     fzf
     gh
-    fd
-    eza
-    zoxide
-    yq
+    git-delta
+    gnu-sed
+    go
     lazygit
     make
+    neovim
     node
-    font-hack-nerd-font
-    wezterm
+    protobuf
+    ripgrep
+    shellcheck
+    taplo
     tmux
-    cmake
+    wezterm
+    yq
+    zoxide
   )
 
   # If all the packages are installed then do nothing
