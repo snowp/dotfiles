@@ -54,5 +54,8 @@
         "${3rd}/luassert/library",
         "${3rd}/lfs/library"
     ],
-    "workspace.checkThirdParty": false
+    "workspace.checkThirdParty": false,
+    "diagnostics.disable": [
+        "undefined-doc-name"
+    ]
 }
