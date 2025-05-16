@@ -48,15 +48,15 @@ vim.opt.completeopt = { 'menuone', 'noselect', 'noinsert' }
 vim.opt.shortmess = vim.opt.shortmess + { c = true }
 vim.api.nvim_set_option('updatetime', 300)
 
-vim.cmd [[colorscheme kanagawa-wave]]
+vim.cmd [[colorscheme kanso-zen]]
 
 vim.cmd [[ filetype plugin on ]]
 
 -- Show special characters
 vim.opt.listchars = {
-	trail = '~',
-	tab = '>-',
-	nbsp = '␣'
+  trail = '~',
+  tab = '>-',
+  nbsp = '␣'
 }
 vim.opt.list = true
 

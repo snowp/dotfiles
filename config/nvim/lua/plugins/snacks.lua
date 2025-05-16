@@ -42,6 +42,7 @@ return {
       { "<leader>tgf", function() Snacks.picker.git_files() end },
       { "<leader>tl",  function() Snacks.picker.grep() end },
       { "<leader>tr",  function() Snacks.picker.resume() end },
+      { "<leader>tc",  function() Snacks.picker.colorschemes() end },
       { "<leader>tb",  function() Snacks.picker.buffers() end },
       { "<leader>tw",  function() Snacks.picker.lsp_workspace_symbols() end },
       {
