@@ -21,5 +21,15 @@
             "// TODO(snowp): ${1}"
         ],
         "description": "TODO"
+    },
+    "tokio test": {
+        "prefix": "tt",
+        "body": [
+            "#[tokio::test]",
+            "async fn $1() {",
+            "$2",
+            "}"
+        ],
+        "description": "TODO"
     }
 }

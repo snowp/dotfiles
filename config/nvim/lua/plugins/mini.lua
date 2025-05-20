@@ -26,7 +26,17 @@ return {
       require('mini.comment').setup()
 
       -- Move lines and blocks of text around
-      require('mini.move').setup()
+      require('mini.move').setup({
+        mappings = {
+          down = '<C-u>',
+          up = '<C-i>',
+
+          line_down = '<C-u>',
+          line_up = '<C-i>',
+        },
+      })
+
+      require('mini.pairs').setup({})
 
       -- Highlight patterns in the current buffer
       require('mini.hipatterns').setup()
