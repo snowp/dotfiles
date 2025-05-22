@@ -89,9 +89,9 @@ return {
             })
           end,
         },
-        clangd = {
-          filetypes = { 'c', 'cpp', 'cc' },
-        },
+        -- clangd = {
+        --   filetypes = { 'c', 'cpp', 'cc' },
+        -- },
         taplo = {},
         pest_ls = {},
         sqlls = {},

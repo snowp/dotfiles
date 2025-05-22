@@ -26,17 +26,38 @@ return {
       require('mini.comment').setup()
 
       -- Move lines and blocks of text around
-      require('mini.move').setup({
-        mappings = {
-          down = '<C-u>',
-          up = '<C-i>',
+      require('mini.move').setup(
+        {
+          mappings = {
+            -- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
+            left = '<leader>mh',
+            right = '<leader>ml',
+            down = '<leader>mj',
+            up = '<leader>mk',
 
-          line_down = '<C-u>',
-          line_up = '<C-i>',
-        },
+            -- Move current line in Normal mode
+            line_left = '<leader>mh',
+            line_right = '<leader>ml',
+            line_down = '<leader>mj',
+            line_up = '<leader>mk',
+          },
+        }
+      )
+
+      require('mini.pairs').setup()
+
+      -- Avoid annoying autoclose behavior with Rust lifetimes.
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "rust",
+        group = vim.api.nvim_create_augroup("Rust_disable_single_quote", { clear = true }),
+        callback = function()
+          require('mini.pairs').unmap("i", "'", "''")
+        end,
+        desc = "Disable single quote Rust",
       })
 
-      require('mini.pairs').setup({})
+      -- Better start page
+      require('mini.starter').setup()
 
       -- Highlight patterns in the current buffer
       require('mini.hipatterns').setup()

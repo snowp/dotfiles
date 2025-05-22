@@ -31,12 +31,9 @@ vim.opt.showcmd = true        -- Show command information on the right side of t
 vim.opt.exrc = true           -- Source local .vimrc files
 vim.opt.secure = true         -- Don't load autocmds from local .vimrc files
 
-vim.opt.signcolumn = 'yes'
+vim.opt.cursorline = true     -- Highlight the current line
 
--- Clean up netrw
-vim.g.netrw_browse_split = 0
-vim.g.netrw_banner = 0
-vim.g.netrw_winsize = 25
+vim.opt.signcolumn = 'yes'
 
 -- Fold using treesitter
 vim.opt.foldenable = false -- Prevents folding on save
