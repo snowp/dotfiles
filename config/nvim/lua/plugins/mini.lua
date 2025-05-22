@@ -28,6 +28,8 @@ return {
       -- Move lines and blocks of text around
       require('mini.move').setup(
         {
+          -- It would be nice to use something like ALT-hjkl but this conflicts with Aerospace
+          -- and using CTRL conflicts with tmux pane management.
           mappings = {
             -- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
             left = '<leader>mh',
