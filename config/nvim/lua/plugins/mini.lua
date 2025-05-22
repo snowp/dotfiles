@@ -6,7 +6,7 @@ return {
       -- Better a/i text objects
       require('mini.ai').setup()
 
-      -- Utiliity functions for dealing with surrounding text (brackets, etc)
+      -- Utility functions for dealing with surrounding text (brackets, etc)
       require('mini.surround').setup()
       require('mini.operators').setup()
 
