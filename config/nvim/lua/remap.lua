@@ -3,6 +3,7 @@ vim.g.mapleader = ' '
 
 -- Easier save mapping
 vim.keymap.set('n', 'Q', ':quit<cr>')
+vim.keymap.set('n', 'W', ':w<cr>')
 
 -- Leave insert mode with jk
 vim.keymap.set('i', 'jk', '<Esc>')
