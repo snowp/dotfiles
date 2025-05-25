@@ -11,13 +11,17 @@ return {
     config = function()
       local augroup = vim.api.nvim_create_augroup("RustFormatting", {})
 
+      -- Use the default selector when there aren't any grouped actions
+      vim.g.rustaceanvim.tools.code_actions.ui_select_fallback = true
+
       vim.g.rustaceanvim = {
         server = {
           on_attach = function(_, bufnr)
             local opts = { silent = false, buffer = bufnr }
 
-            -- Avoid conflicts with other LSP clients. Ideally we wouldn't run into this but its easier than trying to figure out
-            -- why the LSP client is attaching multiple times.
+            -- Avoid conflicts with other LSP clients.
+            -- Ideally we wouldn't run into this but its easier than
+            -- trying to figure out why the LSP client is attaching multiple times.
             vim.b.lsp_attached = true
 
             -- Replace the default LSP ones with the improved rustaceanvim versions.
