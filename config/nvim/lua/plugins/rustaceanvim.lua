@@ -12,9 +12,13 @@ return {
       local augroup = vim.api.nvim_create_augroup("RustFormatting", {})
 
       -- Use the default selector when there aren't any grouped actions
-      vim.g.rustaceanvim.tools.code_actions.ui_select_fallback = true
 
       vim.g.rustaceanvim = {
+        tools = {
+          code_actions = {
+            ui_select_fallback = true
+          }
+        },
         server = {
           on_attach = function(_, bufnr)
             local opts = { silent = false, buffer = bufnr }
