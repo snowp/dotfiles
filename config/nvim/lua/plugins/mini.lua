@@ -13,9 +13,6 @@ return {
       -- Navigate with brackets
       require('mini.bracketed').setup()
 
-      -- Show a notification window when LSP is running
-      -- require('mini.notify').setup()
-
       -- Show buffers in a tab line for easier ]b navigation
       require('mini.tabline').setup()
 
@@ -24,6 +21,24 @@ return {
 
       -- Toggle comments, make comments an object
       require('mini.comment').setup()
+
+      -- Snippets. Using this mostly because it provides a simple way to immediately
+      -- accept a snippet based on the prefix vs having to go via the blink.cmp menu.
+      local gen_loader = require('mini.snippets').gen_loader
+      require('mini.snippets').setup({
+        snippets = {
+          -- Load custom file with global snippets first (adjust for Windows)
+          gen_loader.from_file('~/.config/nvim/snippets/global.json'),
+
+          -- Load snippets based on current language by reading files from
+          -- "snippets/" subdirectories from 'runtimepath' directories.
+          gen_loader.from_lang(),
+        },
+        mappings = {
+          -- Expand snippet at cursor position. Created globally in Insert mode.
+          expand = '<C-w>',
+        },
+      })
 
       -- Move lines and blocks of text around
       require('mini.move').setup(

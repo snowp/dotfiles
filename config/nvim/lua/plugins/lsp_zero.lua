@@ -30,11 +30,6 @@ return {
 
           vim.keymap.set('n', '<leader>lr', '<cmd>:LspRestart<cr>', opts)
           vim.keymap.set('n', '<leader>ls', '<cmd>:LspStart<cr>', opts)
-
-          -- LSP specific telescope views.
-
-          -- Display all symbols in the current workspace in a Telescope view.
-          vim.keymap.set("n", "<leader>w", '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>', opts)
         end
       })
 
@@ -64,6 +59,7 @@ return {
 
       local servers = {
         pls = {},
+        dartls = {},
         gh_actions_ls = {},
         bashls = {},
         terraformls = {},

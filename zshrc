@@ -127,3 +127,8 @@ for file in ~/.zsh-private/*.zsh; do
     source $file
   fi
 done
+
+. "$HOME/.local/bin/env"
+ source $HOME/.local/bin/env
+
+export ANTHROPIC_API_KEY=$(cat $HOME/.anthropic_api_key)
