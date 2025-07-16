@@ -16,7 +16,8 @@ return {
       vim.g.rustaceanvim = {
         tools = {
           code_actions = {
-            ui_select_fallback = true
+            -- This is buggy
+            -- ui_select_fallback = true
           }
         },
         server = {
@@ -63,6 +64,9 @@ return {
           end,
           settings = {
             ["rust-analyzer"] = {
+              diagnostics = {
+                disabled = { "unresolved-proc-macro" },
+              },
               check = {
                 -- workspace = false,
               },

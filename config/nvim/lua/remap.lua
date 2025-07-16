@@ -1,9 +1,7 @@
--- Use space as leader key
-vim.g.mapleader = ' '
+-- Leader key is set in config/lazy.lua
 
 -- Easier save mapping
 vim.keymap.set('n', 'Q', ':quit<cr>')
-vim.keymap.set('n', 'W', ':w<cr>')
 
 -- Leave insert mode with jk
 vim.keymap.set('i', 'jk', '<Esc>')

@@ -73,9 +73,6 @@ return {
         desc = "Disable single quote Rust",
       })
 
-      -- Better start page
-      require('mini.starter').setup()
-
       -- Highlight patterns in the current buffer
       require('mini.hipatterns').setup()
     end

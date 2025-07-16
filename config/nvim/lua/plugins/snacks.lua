@@ -26,6 +26,7 @@ return {
           wo = {} -- Wrap notifications
         }
       },
+      dashboard = {},
     },
     keys = {
       { "<leader>un",  function() Snacks.notifier.hide() end,               desc = "Dismiss All Notifications" },
@@ -45,17 +46,20 @@ return {
       { "<leader>tm",  function() Snacks.picker.marks() end },
       { "<leader>tgf", function() Snacks.picker.git_files() end },
       { "<leader>tgs", function() Snacks.picker.git_stash() end },
+      { "<leader>td",  function() Snacks.picker.diagnostics() end,          desc = "Diagnostics" },
+      { "<leader>tD",  function() Snacks.picker.diagnostics_buffer() end,   desc = "Buffer Diagnostics" },
       { "<leader>tl",  function() Snacks.picker.grep() end },
       { "<leader>tr",  function() Snacks.picker.resume() end },
+      { "<leader>te",  function() Snacks.picker.recent() end },
       { "<leader>tc",  function() Snacks.picker.colorschemes() end },
       { "<leader>tb",  function() Snacks.picker.buffers() end },
-      { "<leader>tw",  function() Snacks.picker.lsp_workspace_symbols() end },
-      { "<leader>ts",  function() Snacks.picker.lsp_symbols() end },
-      { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
+      { "<leader>ts",  function() Snacks.picker.lsp_workspace_symbols() end },
+      { "<leader>tS",  function() Snacks.picker.lsp_symbols() end },
+      { "<leader>n",   function() Snacks.notifier.show_history() end,       desc = "Notification History" },
 
-      { "<leader>td",  function() Snacks.picker.diagnostics() end },
-      { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
-      { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },     { "gd",          function() Snacks.picker.lsp_definitions() end,      desc = "Goto Definition" },
+      { "<leader>.",   function() Snacks.scratch() end,                     desc = "Toggle Scratch Buffer" },
+      { "<leader>S",   function() Snacks.scratch.select() end,              desc = "Select Scratch Buffer" },
+      { "gd",          function() Snacks.picker.lsp_definitions() end,      desc = "Goto Definition" },
       { "gD",          function() Snacks.picker.lsp_declarations() end,     desc = "Goto Declaration" },
       { "gR",          function() Snacks.picker.lsp_references() end,       nowait = true,                        desc = "References" },
       { "gI",          function() Snacks.picker.lsp_implementations() end,  desc = "Goto Implementation" },
@@ -106,5 +110,12 @@ return {
         end,
       })
     end,
+  },
+  {
+    "folke/todo-comments.nvim",
+    optional = true,
+    keys = {
+      { "<leader>tT", function() Snacks.picker.todo_comments() end, desc = "Todo" },
+    },
   }
 }

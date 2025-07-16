@@ -45,6 +45,8 @@ vim.opt.completeopt = { 'menuone', 'noselect', 'noinsert' }
 vim.opt.shortmess = vim.opt.shortmess + { c = true }
 vim.api.nvim_set_option('updatetime', 300)
 
+-- Set colorscheme from the kanso plugin
+-- Using the "zen" variant of the kanso colorscheme
 vim.cmd [[colorscheme kanso-zen]]
 
 vim.cmd [[ filetype plugin on ]]

@@ -1,11 +1,6 @@
+-- Main initialization file
+-- Load lazy.nvim package manager first
 lua require('config.lazy')
-lua require('remap')
+-- Then load settings and keymaps
 lua require('set')
-
-if executable('sourcekit-lsp')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'sourcekit-lsp',
-        \ 'cmd': {server_info->['sourcekit-lsp']},
-        \ 'whitelist': ['swift'],
-        \ })
-endif
+lua require('remap')

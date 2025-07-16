@@ -132,3 +132,5 @@ done
  source $HOME/.local/bin/env
 
 export ANTHROPIC_API_KEY=$(cat $HOME/.anthropic_api_key)
+
+export BD_LOG_ANSI=true
