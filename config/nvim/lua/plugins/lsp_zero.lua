@@ -87,9 +87,9 @@ return {
             })
           end,
         },
-        -- clangd = {
-        --   filetypes = { 'c', 'cpp', 'cc' },
-        -- },
+        clangd = {
+          filetypes = { 'c', 'cpp', 'cc' },
+        },
         taplo = {},
         pest_ls = {},
         sqlls = {},
@@ -97,7 +97,6 @@ return {
           enabled = true,
           root_dir = require('lspconfig').util.root_pattern("tsconfig.json"),
         },
-        -- vtsls = {},
         sourcekit = {
           on_attach = lsp_attach,
           capabilities = {
@@ -200,8 +199,6 @@ return {
     end,
     dependencies = {
       -- LSP Support
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
       'saghen/blink.cmp',
       'onsails/lspkind.nvim',
     },
@@ -231,6 +228,5 @@ return {
 
   -- Snippets
   'L3MON4D3/LuaSnip',
-  'rafamadriz/friendly-snippets',
   'stevearc/conform.nvim',
 }
