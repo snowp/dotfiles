@@ -116,14 +116,14 @@ return {
       })
 
       -- Platform independent way to get the path to GOPATH.
-      local go_path = vim.fn.system('go env GOPATH')
+      local go_path = vim.fn.system('go env GOPATH'):gsub("\n", "")
 
       -- Configure the same Protobuf language server that VS Code uses.
       local configs = require('lspconfig.configs')
       local util = require('lspconfig.util')
       configs.pls = {
         default_config = {
-          cmd = { go_path .. 'go/bin/protobuf-language-server' },
+          cmd = { go_path .. '/bin/protobuf-language-server' },
           filetypes = { 'proto', 'cpp' },
           -- If there is a buf.yaml config file in the root of the project, prefer using that
           -- as the root directory for the language server. Otherwise, use the .git directory.
