@@ -57,6 +57,9 @@ return {
 
       local default_setup = { capabilities = capabilities, on_attach = lsp_attach }
 
+      -- This is special for some reason and doesn't need setup via lspconfig.
+      vim.lsp.enable('kotlin_lsp')
+
       local servers = {
         pls = {},
         dartls = {},

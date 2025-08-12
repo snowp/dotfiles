@@ -120,13 +120,6 @@ for file in ~/.zsh/*.zsh; do
   fi
 done
 
-# Source all files in .zsh-private/
-# This is for private files that should not be in the public repo.
-for file in ~/.zsh-private/*.zsh; do
-  if [[ -f $file ]]; then
-    source $file
-  fi
-done
 
 . "$HOME/.local/bin/env"
  source $HOME/.local/bin/env
@@ -134,3 +127,6 @@ done
 export ANTHROPIC_API_KEY=$(cat $HOME/.anthropic_api_key)
 
 export BD_LOG_ANSI=true
+
+# opencode
+export PATH=/Users/snow/.opencode/bin:$PATH

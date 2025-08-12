@@ -8,7 +8,7 @@ return {
 
       -- Utility functions for dealing with surrounding text (brackets, etc)
       require('mini.surround').setup()
-      require('mini.operators').setup()
+      -- require('mini.operators').setup()
 
       -- Navigate with brackets
       require('mini.bracketed').setup()

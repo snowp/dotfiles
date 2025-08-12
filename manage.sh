@@ -7,7 +7,7 @@ files=(
   aerospace.toml
   config/nvim
   config/atuin
-  config/yabai
+
   config/skhd
   config/
   wezterm.lua

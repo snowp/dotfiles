@@ -16,7 +16,7 @@ return {
           name = "copilot-gpt",
           provider = "copilot",
           model = "gpt-4.1", -- or "gpt-4.1"
-          fastModel = "o3-mini",
+          fastModel = "gpt-4.1",
         }
       }
     },

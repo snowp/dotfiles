@@ -68,7 +68,8 @@ return {
                 disabled = { "unresolved-proc-macro" },
               },
               check = {
-                -- workspace = false,
+                workspace = true,
+                command = "check",
               },
               files = {
                 excludeDirs = {
