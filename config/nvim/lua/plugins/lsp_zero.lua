@@ -59,6 +59,7 @@ return {
 
       -- This is special for some reason and doesn't need setup via lspconfig.
       vim.lsp.enable('kotlin_lsp')
+      vim.lsp.enable('rust-analyzer')
 
       local servers = {
         pls = {},
@@ -98,7 +99,7 @@ return {
         sqlls = {},
         ts_ls = {
           enabled = true,
-          root_dir = require('lspconfig').util.root_pattern("tsconfig.json"),
+          -- root_dir = require('lspconfig').util.root_pattern("tsconfig.json"),
         },
         sourcekit = {
           on_attach = lsp_attach,

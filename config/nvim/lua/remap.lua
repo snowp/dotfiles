@@ -29,3 +29,18 @@ vim.keymap.set('n', '<C-F>', '<cmd>silent !tmux neww ~/.bin/tmux-sessionizer<CR>
 -- Center screen on ^U/^D
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
+
+vim.keymap.set(
+  "i",
+  "<C-x>",
+  "<Cmd>Magenta predict-edit<CR>",
+  { silent = true, noremap = true, desc = "Predict/accept edit" }
+)
+
+
+vim.keymap.set(
+  "n",
+  "<C-x>",
+  "<Cmd>Magenta predict-edit<CR>",
+  { silent = true, noremap = true, desc = "Predict/accept edit" }
+)

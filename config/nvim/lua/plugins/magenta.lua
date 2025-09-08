@@ -7,10 +7,10 @@ return {
       picker = "snacks",
       profiles = {
         {
-          name = "copilot-claude",
+          name = "copilot-gpt-4",
           provider = "copilot",
-          model = "claude-3.7-sonnet", -- or "gpt-4.1"
-          fastModel = "o3-mini",
+          model = "gpt-4.1",
+          fastModel = "gpt-4o-mini",
         },
         {
           name = "copilot-gpt",
@@ -20,5 +20,7 @@ return {
         }
       }
     },
+    setup = function()
+    end
   }
 }

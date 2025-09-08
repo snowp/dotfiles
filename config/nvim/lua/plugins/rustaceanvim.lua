@@ -74,6 +74,8 @@ return {
               files = {
                 excludeDirs = {
                   "target",
+                  "build",
+                  "gradle",
                   "node_modules",
                   ".git",
                   ".nx",
