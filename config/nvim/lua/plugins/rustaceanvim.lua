@@ -61,6 +61,16 @@ return {
             vim.keymap.set("n", "<F8>", function()
               require('dap').step_out()
             end, { buffer = 0 })
+
+            vim.keymap.set('n', '<leader>vwc', function()
+              vim.cmd.RustAnalyzer('config', '{ check = { workspace = true } }')
+              vim.cmd.RustAnalyzer('reloadSettings')
+            end, { buffer = 0 })
+
+            vim.keymap.set('n', '<leader>vcc', function()
+              vim.cmd.RustAnalyzer('config', '{ check = { workspace = false } }')
+              vim.cmd.RustAnalyzer('reloadSettings')
+            end, { buffer = 0 })
           end,
           settings = {
             ["rust-analyzer"] = {
@@ -68,8 +78,9 @@ return {
                 disabled = { "unresolved-proc-macro" },
               },
               check = {
-                workspace = true,
                 command = "check",
+                -- Default to only checking the current crate. Workspace checking can be toggled with keymaps.
+                workspace = false,
               },
               files = {
                 excludeDirs = {

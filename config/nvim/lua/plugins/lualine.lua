@@ -10,13 +10,26 @@ return {
           lualine_c = {
             'filename',
             function()
-              -- invoke `progress` here.
               return require('lsp-progress').progress()
             end
           },
           lualine_x = {
-            -- 'encoding',
-            -- 'fileformat',
+            function()
+              local clients = vim.lsp.get_clients({ bufnr = 0 })
+              for _, client in ipairs(clients) do
+                if client.name == "rust-analyzer" then
+                  local workspace_check = client.settings["rust-analyzer"].check.workspace
+                  if workspace_check == nil or workspace_check then
+                    return "[W]"
+                  else
+                    return "[C]"
+                  end
+                end
+              end
+
+              return ""
+            end,
+
             'filetype'
           },
           lualine_y = { 'progress' },
