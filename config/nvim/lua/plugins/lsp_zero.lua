@@ -141,7 +141,7 @@ return {
       for server, config in pairs(servers) do
         local setup = vim.tbl_deep_extend('force', default_setup, config)
 
-        require('lspconfig')[server].setup(setup)
+        vim.lsp.enable(server, setup)
       end
 
       -- Configure the diagnostic look and feel.
