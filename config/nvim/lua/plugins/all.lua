@@ -9,4 +9,7 @@ return {
 
   -- Git diff in the gutter
   'airblade/vim-gitgutter',
+
+  -- Support for large files
+  'LunarVim/bigfile.nvim',
 }
